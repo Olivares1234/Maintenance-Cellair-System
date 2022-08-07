@@ -1,0 +1,21 @@
+.dataTables_info {
+    color: #32618e;
+}
+
+.pagination>li>a,
+.pagination>li>span {
+    color: #32618e;
+}
+
+.pagination>li>a:hover,
+.pagination>li>span {
+    color: #32618e;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #32618e;
+}
+
+.pagination .page-item.active .page-link:hover {
+    background-color: #32708e;
+}

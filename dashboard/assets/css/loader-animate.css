@@ -1,0 +1,29 @@
+.table-responsive {
+    display: none;
+    overflow: hidden;
+}
+
+.loader {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    /* background-color:#16191e; */
+    position: center;
+}
+
+.loader>div>img {
+    height: 40%;
+    width: 60%;
+    position: absolute;
+    margin: auto;
+    top: auto;
+    bottom: auto;
+    left: 0;
+    right: 0;
+
+
+}
+
+body.noscroll {
+    overflow: hidden;
+}
