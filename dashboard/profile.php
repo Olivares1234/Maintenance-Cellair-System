@@ -1,14 +1,18 @@
-<?Php
-require_once("private/requestProcess.php");
-if(isset($_SESSION["username"])){
-	$_SESSION["username"];
-}
-else{
-	header("Location:../index");
-	die();
+<?php
+
+include 'conn.php';
+
+session_start();
+require_once('functions.php');
+
+$user_id = $_SESSION['id'];
+
+if(!isset($user_id)){
+   header('location:../login.php');
 }
 
- ?>
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,78 +20,46 @@ else{
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="author" content="Gab">
   <link href="assets/img/logo/repair.png" rel="icon">
-  <title>Maintenance-Systems - Form Request</title>
+  <title>Maintenance-Systems - Dashboard</title>
   <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <!-- Select2 -->
-  <link href="assets/vendor/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css">
-  <!-- Bootstrap DatePicker -->  
-  <link href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
-  <!-- Bootstrap Touchspin -->
-  <link href="assets/vendor/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css" rel="stylesheet" >
-  <!-- ClockPicker -->
-  <link href="assets/vendor/clock-picker/clockpicker.css" rel="stylesheet">
-  <!-- RuangAdmin CSS -->
   <link href="assets/css/ruang-admin.min.css" rel="stylesheet">
   <link href="assets/css/tooptip_style.css" rel="stylesheet">
   <link href="assets/css/container-title-page.css" rel="stylesheet">
   <link href="assets/css/datatable-pagination-style.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="assets/css/toastr.min.css">
+  <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/loader-animate.css">
-
-  <style>
-    .lblname{
-        font-weight: 600;
-    }
-    .rightbtn{
-        float:right;
-    }
-    .breadcrumb .breadcrumb-item{
-
-        font-weight:600px;
-        font-size: 18px;
-
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        background: transparent;
-        bottom: 0;
-        color: transparent;
-        cursor: pointer;
-        height: auto;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: auto;
-        }
-  </style>
+    <!-- Bootstrap DatePicker -->  
+  <link href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+  <link rel="stylesheet" href="css/style.css">
+  <link href="assets/css/profile.css" rel="stylesheet">
 </head>
-
 <body id="page-top">
   <div id="wrapper">
     <!-- Sidebar -->
     <ul class="sticky-top h-100 navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index">
         <div class="sidebar-brand-icon">
           <img src="assets/img/logo/repair.png">
         </div>
         <div class="sidebar-brand-text mx-3">MAINTENANCE SYSTEM</div>
       </a>
       <hr class="sidebar-divider my-0">
-      <?php if($_SESSION['role'] === 'admin'){?>
-      <li class="nav-item">
+
+      <?php if($_SESSION['role'] != 'user'){?>
+      <li class="nav-item active">
         <a class="nav-link" href="home">
         <i class="fa fa-home" aria-hidden="true"></i>
           <span>Dashboard</span></a>
       </li>
       <?php } ?>
 
-      <?php if($_SESSION['role'] === 'user'){?>
       <div class="mb-2"></div>
+      <?php if($_SESSION['role'] != 'admin'){?>
       <hr class="sidebar-divider my-0">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="formRequest">
         <i class="fas fa-file-invoice"></i>
           <span>Form Request</span></a>
@@ -95,7 +67,7 @@ else{
       <?php } ?>
      
       <div class="mb-2"></div>
-      <?php if($_SESSION['role'] === 'admin'){?>
+      <?php if($_SESSION['role'] != 'user'){?>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
         <a class="nav-link" href="doneRequest">
@@ -105,7 +77,7 @@ else{
       <?php } ?>
 
       <div class="mb-2"></div>
-      <?php if($_SESSION['role'] === 'admin'){?>
+      <?php if($_SESSION['role'] != 'user'){?>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
         <a class="nav-link" href="pendingRequest">
@@ -113,8 +85,8 @@ else{
           <span>Pending Request</span></a>
       </li>
       <?php } ?>
-      
-            <div class="mb-2"></div>
+
+      <div class="mb-2"></div>
       <?php if($_SESSION['role'] != 'user'){?>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
@@ -124,21 +96,28 @@ else{
       </li>
       <?php } ?>
 
+      
+
       <hr class="sidebar-divider">
-      <div class="version" id="version-ruangadmin">MS - v O.1</div>
-      </ul>
+      <div class="version" id="version-ruangadmin1">MS - v O.1</div>
+    </ul>
     <!-- Sidebar -->
-    
     <div id="content-wrapper" class="d-flex flex-column">
       <div id="content">
         <!-- TopBar -->
-        <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 position-fixed" style="width:100%; padding-right:15%">
+        
+        <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-1 position-fixed" style="width:100%; padding-right:15%">
           <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
             <i class="fa fa-bars"></i>
           </button>
           <ul class="navbar-nav ml-auto">
+
+            <!-- search message remove -->
+
+            <!-- dropdown message remove -->
+
              <!-- Start Topbar -->
-             <div class="topbar-divider d-none d-sm-block"></div>
+            <div class="topbar-divider d-none d-sm-block"></div>
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -146,7 +125,7 @@ else{
                 <span class="d-lg-inline text-white small">&nbsp;&nbsp;<?php echo $_SESSION["username"];?></span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-              <a class="dropdown-item" href="profile">
+                <a class="dropdown-item" href="profile">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
@@ -167,106 +146,69 @@ else{
             </li>
           </ul>
         </nav>
-        <!-- End Topbar -->
-        <br>
-        <br>
-        <br>
-        <br>
+      <br>
+      <br>
+      <br>
+      <!-- header end -->
 
-         <!-- Container Fluid-->
-         <?php if($_SESSION['role'] != 'user'){?>
-         <center><h1 style="position: relative; top: 230px; bottom:0px;">404 PAGE NOT FOUND</h1></center>
-         <?php } ?>
-         <?php if($_SESSION['role'] != 'admin'){?>
-         <div class="container-fluid" id="container-wrapper">
+      <!-- Navbar Start -->
+
+        <!-- End Topbar -->
+    
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <!-- <h1 class="h3 mb-0 text-gray-800">DataTables</h1> -->
+            <!-- <h1 class="h3 mb-0 text-gray-800">Dashboard</h1> -->
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <!-- <li class="breadcrumb-item">Tables</li> -->
-              <li class="breadcrumb-item active" aria-current="page">Form Request</li>
-              <!-- <h1 tooltip="Slide to the left" flow="left">Left</h1> -->
-            </h3>
+              <li class="breadcrumb-item"><a href="home">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Profile</li>
             </ol>
           </div>
 
+          
           <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-11">
               <!-- Form Basic -->
-              <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <div class="card mb-1">
+                <div class="card-header">
                   <!-- <h6 class="m-0 font-weight-bold text-primary">Form Basic</h6> -->
                 </div>
                 <div class="card-body">
                 <div class="loader">
                    <div><img src="assets/img/loader/box-unscreen.gif" alt=""></div>
                 </div>
-                  <form action="private/requestProcess.php" method="POST">
+                  <form action="private" method="POST" autocomplete="off">
                   <div class="form-group">
-                      <label for="exampleFormControlInput1" class="lblname">REQUESTED BY:</label>
-                      <input type="text" class="form-control" name="name" id="exampleFormControlInput1"
-                        placeholder="NAME...." required>
-                      <input type="text" class="form-control" name="email" id="exampleFormControlInput1" value=<?= $_SESSION['email']?> hidden>
-                    </div>
+                    <?php
+                        $select_profile = $con->prepare("SELECT * FROM `tbl_users` WHERE id = ?");
+                        $select_profile->execute([$user_id]);
+                        $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+                    ?>
 
-                    <div class="form-group">
-                      <label for="exampleFormControlSelect1" class="lblname">COMPANY:</label>
-                      <select class="form-control" name="company" id="exampleFormControlSelect1">
-                        <option value="exelpack">EXELPACK</option>
-                        <option value="minamoto">MINAMOTO</option>
-                        <option value="cellair">CELLAIR</option>
-                      </select>
+                    <div class="profile">
+                        <center>
+                        <img class="imgs" src="uploaded_img\<?= $_SESSION['image']; ?>" alt="">
+                        <h3><?= $fetch_profile['username']; ?></h3>
+                         </center>
+                        <a href="updateProfile" class="btn1">update profile</a>
+                        <a href="logout" class="delete-btn" data-toggle="modal" data-target="#logoutModal">logout</a>
+                        <!-- <div class="flex-btn">
+                            <a href="login.php" class="option-btn">login</a>
+                            <a href="register.php" class="option-btn">register</a>
+                        </div> -->
                     </div>
-                    <!-- <div class="form-group">
-                      <label for="exampleInputPassword1">Department:</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div> -->
-                    <div class="form-group">
-                      <label for="exampleFormControlSelect1" class="lblname">DEPARTMENT:</label>
-                      <select class="form-control" name="department" id="exampleFormControlSelect1">
-                        <option value="admin">ADMIN</option>
-                        <option value="acctg">ACCTG</option>
-                        <option value="cs">CS</option>
-                        <option value="engg">ENGG</option>
-                        <option value="sales">SALES</option>
-                        <option value="operation">OPERATION</option>
-                        <option value="it">IT</option>
-                      </select>
-                    </div>
+                    
 
-                   <div class="form-group">
-                     <label for="simpleDataInput" class="lblname">DATE REQUESTED:</label>
-                      <div class="input-group date">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                        </div>
-                        <input type="date" name="daterequested" class="form-control" value="MM/DD/YYYY" required>
-                      </div>
-                  </div>
-
-                  <!-- <div class="form-group" id="simple-date1">
-                     <label for="simpleDataInput" class="lblname">DATE REQUESTED:</label>
-                      <div class="input-group date">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                        </div>
-                        <input type="date" class="form-control" value="MM/DD/YYYY" name="daterequested" id="simpleDataInput">
-                      </div>
-                  </div> -->
-
-                    <div class="form-group">
-                      <label for="exampleFormControlTextarea1" class="lblname">REMARKS:</label>
-                      <textarea class="form-control" name="remarks" id="exampleFormControlTextarea1" rows="5" placeholder="COMMENTS...." required></textarea>
-                    </div>
-                    <div class="rightbtn1"> <center><button type="submit"  name="btnsubmit" class="btn btn-primary">Submit</button></center></div>
                   </form>
                 </div>
               </div>
-            <div class="col-lg-12">
-              <?php } ?>
 
-          <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+
+        
+
+        
+    <!-- Modal Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -286,30 +228,31 @@ else{
               </div>
             </div>
           </div>
-
-        </div>
-        <!---Container Fluid-->
-      </div>
-</div>
-         <!-- Footer -->
      
-         <footer class="sticky-footer1 bg-white">
+         
+ 
+
+            <!-- End Navbar -->
+
+
+              <!-- Footer Start -->
+              </div> 
+  <footer class="sticky-footer1 bg-white" style="top:250px">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
           <span>Copyright &copy; <script>document.write(new Date().getFullYear());</script> MS - v O.1</span>
           </div>
         </div>
       </footer>
-      <!-- Footer -->
-    </div>
-  </div>
+
+  
+  
 
   <!-- Scroll to top -->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
-<script src="assets/js/jquery-3.6.0.js"></script>
+  <script src="assets/js/jquery-3.6.0.js"></script>
 <script src="assets/js/toastr.min.js"></script>
 <script src="assets/js/toastr-options.js"></script>
  
@@ -329,8 +272,11 @@ else{
     <!-- Javascript for this page -->
 <script src="assets/js/picker_date_format.js"></script>
 
-<script>
-<?php include("private/msg_popup.php"); ?>
+  <!-- Page level plugins -->
+  <script src="assets/vendor/datatables/jquery.dataTables.min.js"></script>
+  <!-- <script src="assets/vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
+
+  <script>
    //loader animation page
 	 $(window).on("load",function(){
         $(".loader").fadeOut(1000);
@@ -338,7 +284,6 @@ else{
         $('#dataTableHover').DataTable();
       });
 </script>
-
-
 </body>
 </html>
+<!-- End Footer -->

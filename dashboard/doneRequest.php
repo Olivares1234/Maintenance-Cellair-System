@@ -31,13 +31,14 @@ $all = $data->RetrieveAllDone();
   <link href="assets/css/container-title-page.css" rel="stylesheet">
   <link href="assets/css/datatable-pagination-style.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/loader-animate.css">
+  <link rel="stylesheet" href="assets/css/table-mobile-responsive.css">
 </head>
 
 <body id="page-top">
   <div id="wrapper">
     <!-- Sidebar -->
     <ul class="sticky-top h-100 navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index">
         <div class="sidebar-brand-icon">
           <img src="assets/img/logo/repair.png">
         </div>
@@ -112,14 +113,14 @@ $all = $data->RetrieveAllDone();
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <img class="img-profile rounded-circle" src="assets/img/boy.png" style="max-width: 60px">
+                <img class="img-profile rounded-circle" src="uploaded_img\<?= $_SESSION['image']; ?>" style="max-width: 60px">
                 <span class="d-lg-inline text-white small">&nbsp;&nbsp;<?php echo $_SESSION["username"];?></span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <!-- <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="profile">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
-                </a> -->
+                </a>
                 <!-- <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
@@ -152,7 +153,7 @@ $all = $data->RetrieveAllDone();
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <!-- <h1 class="h3 mb-0 text-gray-800">DataTables</h1> -->
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="home">Home</a></li>
               <!-- <li class="breadcrumb-item">Tables</li> -->
               <li class="breadcrumb-item active" aria-current="page">Done Request</li>
               <!-- <h1 tooltip="Slide to the left" flow="left">Left</h1> -->
@@ -174,7 +175,7 @@ $all = $data->RetrieveAllDone();
                    <div><img src="assets/img/loader/box-unscreen.gif" alt=""></div>
                 </div>
                 <div class="table-responsive p-3">
-                  <table style="cellspacing:0; width:100%;" class="table align-items-center table-flush table-hover display responsive nowrap" id="dataTableHover">
+                  <table style="cellspacing:0; width:100%;" class="table align-items-center table-flush table-hover dt-responsive nowrap" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
                         <th>RsNo.</th>
@@ -207,7 +208,7 @@ $all = $data->RetrieveAllDone();
                         <td><?php echo $val['company'];?></td>
                         <td><?php echo $val['department'];?></td>
                         <td><?php echo $val['date_request'];?></td>
-                        <td><?php echo $val['remarks'];?></td>
+                        <td style="white-space: normal !important;"><?php echo $val['remarks'];?></td>
                         <td><span class="badge badge-success"><?php echo $val['status'];?></span></td>
                         <td><a class="btn-outline" tooltip="Print" flow="up" href="viewReport?id=<?=$val['id']?>" ><i class="fas fa-print fa-2x"></i></a></td>
 
@@ -240,7 +241,7 @@ $all = $data->RetrieveAllDone();
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                  <a href="logout.php" class="btn btn-primary">Logout</a>
+                  <a href="logout" class="btn btn-primary">Logout</a>
                 </div>
               </div>
             </div>

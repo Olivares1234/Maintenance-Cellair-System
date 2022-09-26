@@ -6,18 +6,22 @@ class controllerClass{
     private $id;
     private $name;
     private $company;
+    private $email;
     private $department;
     private $date_request;
+    private $date_finish;
     private $remarks;
     private $status;
     protected $con_Db;
  
- public function __construct($id=0, $name="", $company="", $department="", $date_request="", $remarks="", $status=""){
+ public function __construct($id=0, $name="", $email="", $company="", $department="", $date_request="", $date_finish="", $remarks="", $status=""){
     $this->id=$id;
     $this->name=$name;
+    $this->email=$email;
     $this->company=$company;
     $this->department=$department;
     $this->date_request=$date_request;
+    $this->date_finish=$date_finish;
     $this->remarks=$remarks;
     $this->status=$status;
     //setup connection db
@@ -39,6 +43,12 @@ class controllerClass{
     public function getname(){
       return $this->name;
     }
+   public function setemail($email){
+      $this->email=$email;
+    }
+    public function getemail(){
+      return $this->email;
+    }
     public function setcompany($company){
        $this->company=$company;
     }
@@ -55,7 +65,13 @@ class controllerClass{
       $this->date_request=$date_request;
     }
     public function getdate_request(){
-      return $this->getdate_request;
+      return $this->date_request;
+    }
+    public function setdate_finish($date_finish){
+      $this->date_finish=$date_finish;
+    }
+    public function getdate_finish(){
+      return $this->date_finish;
     }
     public function setremarks($remarks){
       $this->remarks=$remarks;
@@ -77,7 +93,6 @@ class controllerClass{
        $stm->execute([$this->name, $this->company, $this->department, $this->date_request, $this->remarks, $this->status]);
       //  echo "<script>alert('data saved successfully');document.location='../../index.php'</script>";
       
-
        }catch(PDOException $ex){
        return $ex->getMessage();
        }
@@ -140,8 +155,8 @@ class controllerClass{
    public function update(){
  
        try{
-          $stm = $this->con_Db->prepare("UPDATE tbl_request SET name=?, company=?, department=?, date_request=?, remarks=?, status=? WHERE id =?");
-          $stm->execute([$this->name,$this->company,$this->department,$this->date_request,$this->remarks,$this->status,$this->id]);
+          $stm = $this->con_Db->prepare("UPDATE tbl_request SET name=?, email=?, company=?, department=?, date_request=?, date_finish=?, remarks=?, status=? WHERE id =?");
+          $stm->execute([$this->name,$this->email,$this->company,$this->department,$this->date_request,$this->date_finish,$this->remarks,$this->status,$this->id]);
  
        }
        catch(PDOException $ex){
@@ -199,7 +214,7 @@ class controllerClass{
  
       try{
 
-         $stm = $this->con_Db->prepare("SELECT * FROM tbl_request WHERE date_request >= CURDATE()");
+         $stm = $this->con_Db->prepare("SELECT * FROM tbl_request WHERE status='pending' AND date_request >= CURDATE()");
          $stm->execute([$this->name,$this->company,$this->department,$this->date_request,$this->remarks,$this->status,$this->id]); 
          $total = $stm->fetchAll();
          return $total;
@@ -209,6 +224,17 @@ class controllerClass{
       catch(PDOException $ex){
          return $ex->getMessage();
       }
+   }
+
+   public function insertData_TimeLine(){ // Inserting Data Timeline.
+      try {
+      $stm = $this->con_Db->prepare("INSERT INTO tbl_timeline(name, description, status, start_date, end_date) values(?, ?, ?, ?, ?)");
+      $stm->execute([$this->name,$this->remarks,$this->status,$this->date_request,$this->date_finish]);
+     //  echo "<script>alert('data saved successfully');document.location='../../index.php'</script>";
+      }catch(Exception $e){
+      return $e->getMessage();
+      }
+
    }
 }
 

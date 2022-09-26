@@ -1,3 +1,5 @@
+<!-- 
+ -->
 
 <link rel="stylesheet" type="text/css" href="assets/css/toastr.css">
   <link rel="stylesheet" type="text/css" href="assets/css/toastr.min.css">
@@ -88,7 +90,7 @@
 <div class="modal-footer">
             <button type="button" class="btn btn-outline-primary" data-dismiss="modal">No</button>
             <!-- <a href="#" name="update" class="btn btn-primary">Done!</a> -->
-			<input type="submit" name="update" class="btn btn-primary" value="Yes!">
+			<input type="submit" name="bupdate" class="btn btn-primary" value="Yes!">
 </div>
 </div>
 	</form>

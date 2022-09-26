@@ -1,5 +1,10 @@
-<?Php
+<?php
+
+include 'conn.php';
+
 session_start();
+require_once('functions.php');
+
 if(isset($_SESSION["username"])){
 	$_SESSION["username"];
 }
@@ -7,12 +12,76 @@ else{
 	header("Location:../index");
 	die();
 }
-include 'updateStatusToday.php'; 
 
-include('controllerClass.php');
-$data = new controllerClass();
-$all = $data->retrieveRequestToday();
- ?>
+$admin_id = $_SESSION['id'];
+
+
+if(isset($_POST['update'])){
+
+   $name = $_POST['name'];
+   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $datetimestamp = date('Y-m-d-H-i-s-a', $_POST['dateadded']);
+   $update_profile = $con->prepare("UPDATE `tbl_users` SET username = ?, email = ? WHERE id = ?");
+   $update_profile->execute([$name, $email, $admin_id]);
+
+   $old_image = $_POST['old_image'];
+   $image = $_FILES['image']['name'];
+   $image_tmp_name = $_FILES['image'];
+   $image_size = $_FILES['image']['size'];
+   $image_folder = 'uploaded_img/'.$image;
+
+   if(!empty($image)){
+
+      if($image_size > 2000000){
+         flash("msg4","Image Size Is Too Large!");
+      
+         
+      }else{
+         $update_image = $con->prepare("UPDATE `tbl_users` SET image = ? WHERE id = ?");
+         $update_image->execute([$image, $admin_id]);
+
+         if($update_image){
+            // move_uploaded_file($image_tmp_name, $image_folder);
+            // link('uploaded_img/'.$old_image);
+            move_uploaded_file($_FILES['image']['tmp_name'], "uploaded_img/$image");
+            flash("msg3","Image Has Been Updated!");
+        
+         }
+      }
+
+   }
+
+   $old_pass = $_POST['old_pass'];
+   $previous_pass = md5($_POST['previous_pass']);
+   $previous_pass = filter_var($previous_pass, FILTER_SANITIZE_STRING);
+   $new_pass = md5($_POST['new_pass']);
+   $new_pass = filter_var($new_pass, FILTER_SANITIZE_STRING);
+   $confirm_pass = md5($_POST['confirm_pass']);
+   $confirm_pass = filter_var($confirm_pass, FILTER_SANITIZE_STRING);
+
+   if(!empty($previous_pass) || !empty($new_pass) || !empty($confirm_pass)){
+      if($previous_pass != $old_pass){
+  
+         // flash("msg4","Old password not matched!");
+  
+      }elseif($new_pass != $confirm_pass){
+   
+         flash("msg4","Check Old password & Confirm Password Not Matched!");
+       
+      }else{
+         $update_password = $con->prepare("UPDATE `tbl_users` SET password = ? WHERE id = ?");
+         $update_password->execute([$confirm_pass, $admin_id]);
+
+         flash("msg3","Password Has Been Updated!");
+      
+      }
+   }
+
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,42 +92,23 @@ $all = $data->retrieveRequestToday();
   <meta name="description" content="">
   <meta name="author" content="Gab">
   <link href="assets/img/logo/repair.png" rel="icon">
-  <title>Maintenance-Systems - Pending Request</title>
+  <title>Maintenance-Systems - Dashboard</title>
+
   <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="assets/css/ruang-admin.min.css" rel="stylesheet">
-  <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> disregard -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css"> <!-- important -->
   <link href="assets/css/tooptip_style.css" rel="stylesheet">
   <link href="assets/css/container-title-page.css" rel="stylesheet">
   <link href="assets/css/datatable-pagination-style.css" rel="stylesheet">
+  <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/loader-animate.css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-  <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+    <!-- Bootstrap DatePicker -->  
+  <link href="assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+  <link rel="stylesheet" href="css/style.css">
+  <link href="assets/css/profile-update.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="assets/css/toastr.css">
   <link rel="stylesheet" type="text/css" href="assets/css/toastr.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/css/loader_animate.css">
-  <link rel="stylesheet" href="assets/css/date-range-style.css">
-  <link rel="stylesheet" href="assets/css/table-mobile-responsive.css">
-  <style>
-      input[type="date"]::-webkit-calendar-picker-indicator {
-        background: transparent;
-        bottom: 0;
-        color: transparent;
-        cursor: pointer;
-        height: auto;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: auto;
-        }
-</style>
 </head>
-
 <body id="page-top">
   <div id="wrapper">
     <!-- Sidebar -->
@@ -67,13 +117,13 @@ $all = $data->retrieveRequestToday();
         <div class="sidebar-brand-icon">
           <img src="assets/img/logo/repair.png">
         </div>
-          <div class="sidebar-brand-text mx-3">MAINTENANCE SYSTEM</div>
+        <div class="sidebar-brand-text mx-3">MAINTENANCE SYSTEM</div>
       </a>
       <hr class="sidebar-divider my-0">
 
       <?php if($_SESSION['role'] != 'user'){?>
-      <li class="nav-item">
-       <a class="nav-link" href="home">
+      <li class="nav-item active">
+        <a class="nav-link" href="home">
         <i class="fa fa-home" aria-hidden="true"></i>
           <span>Dashboard</span></a>
       </li>
@@ -112,12 +162,14 @@ $all = $data->retrieveRequestToday();
       <div class="mb-2"></div>
       <?php if($_SESSION['role'] != 'user'){?>
       <hr class="sidebar-divider my-0">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="newRequest">
           <i class="fas fa-users"></i>
           <span>New Request Today</span></a>
       </li>
       <?php } ?>
+
+      
 
       <hr class="sidebar-divider">
       <div class="version" id="version-ruangadmin1">MS - v O.1</div>
@@ -132,7 +184,13 @@ $all = $data->retrieveRequestToday();
             <i class="fa fa-bars"></i>
           </button>
           <ul class="navbar-nav ml-auto">
-             <div class="topbar-divider d-none d-sm-block"></div>
+
+            <!-- search message remove -->
+
+            <!-- dropdown message remove -->
+
+             <!-- Start Topbar -->
+            <div class="topbar-divider d-none d-sm-block"></div>
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -161,126 +219,84 @@ $all = $data->retrieveRequestToday();
             </li>
           </ul>
         </nav>
-        <!-- End Topbar -->
-        <br>
-        <br>
-        <br>
-        <br>
+      <br>
+      <br>
+      <br>
+      <!-- header end -->
 
+      <!-- Navbar Start -->
+
+        <!-- End Topbar -->
+    
         <!-- Container Fluid-->
-        <?php if($_SESSION['role'] != 'admin'){?>
-            <center><h1 style="position: relative; top: 230px; bottom:0px;">404 PAGE NOT FOUND</h1></center>
-            <?php } ?>
-            <?php if($_SESSION['role'] != 'user'){?>
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <!-- <h1 class="h3 mb-0 text-gray-800">DataTables</h1> -->
+            <!-- <h1 class="h3 mb-0 text-gray-800">Dashboard</h1> -->
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="home">Home</a></li>
-              <!-- <li class="breadcrumb-item">Tables</li> -->
-              <li class="breadcrumb-item active" aria-current="page">New Request</li>
-              <!-- <h1 tooltip="Slide to the left" flow="left">Left</h1> -->
-            </h3>
+              <li class="breadcrumb-item active" aria-current="page">Update Profile</li>
             </ol>
           </div>
 
-          <!-- Row -->
+          
           <div class="row">
-            <!-- Datatables Remove -->
-         
-            <!-- DataTable with Hover -->
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <!-- <h6 class="m-0 font-weight-bold text-primary">DataTables with Hover</h6> -->
-                  <!-- <div class="col-sm-2"><label for="DateRange Search:"></label></div> -->
-                  <div class="form-group row"> 
-                    <div class="col-sm-10"> <h5>Search Date Range:</h5></div>
-                     <div class="col-md-4">
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-info text-white" id="basic-addon1"><i
-                                        class="fas fa-calendar-alt"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="min" name="min" placeholder="Start Date" readonly>
-                        </div>
-                    </div>
-                   
-                    <div class="col-md-4">
-                      <div></div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-info text-white" id="basic-addon1"><i
-                                        class="fas fa-calendar-alt"></i></span>
-                            </div>
-                            <input type="text" class="form-control" id="max" name="max" placeholder="End Date" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="input-group mb-1">
-                            <button onClick="window.location.reload();" class="btn btn-outline-info btn-md-5"><i class="fas fa-sync"></i> Refresh</button>&nbsp;
-                            <!-- <button id="reset" class="btn btn-outline-warning btn-md-5">Reset</button> -->
-                        </div>
-                    </div>
-                    </div>
-             
+            <div class="col-lg-11">
+              <!-- Form Basic -->
+              <div class="card mb-1">
+                <div class="card-header">
+                  <!-- <h6 class="m-0 font-weight-bold text-primary">Form Basic</h6> -->
                 </div>
-                <hr>
+                <div class="card-body">
+                <center>
                 <div class="loader">
-                   <div><img src="assets/img/loader/box-unscreen.gif"  alt=""></div>
+                <div><img src="assets/img/loader/box-unscreen.gif" alt=""></div>
                 </div>
-                <div class="table-responsive p-3">
-                  <table style="cellspacing:0; width:100%;" id="tableId" class="table align-items-center table-flush table-hover dt-responsive nowrap" id="dataTableHover">
-                    <thead class="thead-light">
-                      <tr>
-                        <th>Rs#</th>
-                        <th>Name</th>
-                        <th>Company</th>
-                        <th>Department</th>
-                        <th>Date Request</th>
-                        <th>Remarks</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <!-- <tfoot>
-                      <tr>
-                          --th
-                      </tr>
-                    </tfoot> -->
-                   
-                    <tbody>
-                    <?php foreach($all as $key => $val) {?>
-                      <tr>
-                  
-                        <td><?php echo 'RS'.$val['id']?></td>
-                        <td><?php echo $val['name'];?></td>
-                        <td><?php echo $val['company'];?></td>
-                        <td><?php echo $val['department'];?></td>
-                        <td><?php echo $val['date_request'];?></td>
-                        <td style="white-space: normal !important;"><?php echo $val['remarks'];?></td>
-                        <td><span class="badge badge-danger"><?php echo $val['status'];?></span></td>
-                        <td><a class="btn-outline" tooltip="Edit" flow="up" data-toggle="modal" href="#"  data-target="#update_modal<?php echo $val['id']?>"><i class="fas fa-pen-square fa-2x"></i></a></td>
-                      </tr>
-                    <?php include 'modalPendsToday.php';  } ?> 
-                    </tbody> 
-                  </table>
+                </center>
+                <?php
+                     $select_profile = $con->prepare("SELECT * FROM `tbl_users` WHERE id = ?");
+                     $select_profile->execute([$admin_id]);
+                     $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+                  ?>
+            <section class="update-profile-container">
+                <form action="updateProfile.php" method="post" enctype="multipart/form-data">
+                     <img class='imgs' src="uploaded_img/<?= $fetch_profile['image']; ?>" alt="">
+                     <div class="flex">
+                        <div class="inputBox">
+                           <input type="hidden" name="dateadded" value="<?php echo time(); ?>">
+                           <span>username : </span>
+                           <input type="text" name="name" required class="form-control" placeholder="enter your name" value="<?= $fetch_profile['username']; ?>">
+                           <span>email : </span>
+                           <input type="email" name="email" required class="form-control" placeholder="enter your email" value="<?= $fetch_profile['email']; ?>">
+                           <span>profile pic : </span>
+                           <input type="hidden" name="old_image" class="form-control" value="<?= $fetch_profile['image']; ?>">
+                           <input type="file" name="image" class="form-control" accept="image/jpg, image/jpeg, image/png">
+                        </div>
+                        <div class="inputBox">
+                           <input type="hidden" name="old_pass" value="<?= $fetch_profile['password']; ?>">
+                           <span>old password :</span>
+                           <input type="password" name="previous_pass" class="form-control" placeholder="enter previous password">
+                           <span>new password :</span>
+                           <input type="password" name="new_pass" class="form-control"  placeholder="enter new password">
+                           <span>confirm password :</span>
+                           <input type="text" name="confirm_pass" class="form-control" placeholder="confirm new password">
+                        </div>
+                     </div>
+                     <div class="flex-btn">
+                        <input type="submit" value="update profile" name="update" class="option-btn">
+                        <a href="profile" class="option-btn">go back</a>
+                     </div>
+                  </form>
+      </section>
+
                 </div>
-              
               </div>
-              <?Php  }?>
-            </div> 
-          </div>
-          
-          <!--Row-->
 
-          
 
-          <!-- Documentation Link Remove-->
+        
 
-          <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+        
+    <!-- Modal Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -300,28 +316,32 @@ $all = $data->retrieveRequestToday();
               </div>
             </div>
           </div>
+     
+         
+ 
+
+            <!-- End Navbar -->
 
 
-        </div>
-        <!---Container Fluid-->
-      </div>
-      <!-- Footer -->
-      <footer class="sticky-footer1 bg-white">
+              <!-- Footer Start -->
+              <!--</div> -->
+  <footer class="sticky-footer1 bg-white" style="top:250px">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
           <span>Copyright &copy; <script>document.write(new Date().getFullYear());</script> MS - v O.1</span>
           </div>
         </div>
       </footer>
-      <!-- Footer -->
-    </div>
-  </div>
+
+  
+  
 
   <!-- Scroll to top -->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
 
+  
   <script src="assets/js/jquery-3.6.0.js"></script>
  <script src="assets/js/toastr.min.js"></script>
  <script src="assets/js/toastr-options.js"></script>
@@ -335,11 +355,11 @@ $all = $data->retrieveRequestToday();
 
 
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script> -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Page level plugins -->
-  <!-- <script src="vendor/datatables/jquery.dataTables.min.js"></script>-->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="assets/vendor/datatables/dataTables.bootstrap4.min.js"></script> 
 
 
@@ -363,9 +383,8 @@ $all = $data->retrieveRequestToday();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script> -->
     <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
     <script src="assets/js/loader.js"></script>
+    <script><?php include("msg_popup.php"); ?></script>
     <script src="assets/js/date-range.js"></script>
-    <script><?php include "private/msg_popup.php";  ?></script>
-    
-
 </body>
 </html>
+<!-- End Footer -->

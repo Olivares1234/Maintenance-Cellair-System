@@ -1,3 +1,4 @@
+
 <?php if(isset($_SESSION['msg3'])): ?>
 		toastr.info("<?php echo flash('msg3'); ?>");
 		<?php endif ?>

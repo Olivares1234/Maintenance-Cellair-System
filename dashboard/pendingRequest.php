@@ -40,15 +40,23 @@ $all = $data->RetrieveAllPending();
   <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/toastr.css">
   <link rel="stylesheet" type="text/css" href="assets/css/toastr.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/loader_animate.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/loader_animate.css">
   <link rel="stylesheet" href="assets/css/date-range-style.css">
-  <style>
-    /* table {table-layout:fixed;} */
-    /* table td { word-wrap:break-word; table-layout:fixed;} */
-    table th, table td { white-space: normal; }
-.child {table-layout:fixed} .child td {word-wrap:break-word; white-space: normal !important;}
-  </style>
-
+  <link rel="stylesheet" href="assets/css/table-mobile-responsive.css">
+<style>
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        background: transparent;
+        bottom: 0;
+        color: transparent;
+        cursor: pointer;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: auto;
+        }
+</style>
 
 </head>
 
@@ -56,7 +64,7 @@ $all = $data->RetrieveAllPending();
   <div id="wrapper">
     <!-- Sidebar -->
     <ul class="sticky-top h-100 navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index">
         <div class="sidebar-brand-icon">
           <img src="assets/img/logo/repair.png">
         </div>
@@ -129,14 +137,14 @@ $all = $data->RetrieveAllPending();
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <img class="img-profile rounded-circle" src="assets/img/boy.png" style="max-width: 60px">
+                <img class="img-profile rounded-circle" src="uploaded_img\<?= $_SESSION['image']; ?>" style="max-width: 60px">
                 <span class="d-lg-inline text-white small">&nbsp;&nbsp;<?php echo $_SESSION["username"];?></span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <!-- <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="profile">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
-                </a> -->
+                </a>
                 <!-- <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
@@ -169,7 +177,7 @@ $all = $data->RetrieveAllPending();
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <!-- <h1 class="h3 mb-0 text-gray-800">DataTables</h1> -->
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="home">Home</a></li>
               <!-- <li class="breadcrumb-item">Tables</li> -->
               <li class="breadcrumb-item active" aria-current="page">Pending Request</li>
               <!-- <h1 tooltip="Slide to the left" flow="left">Left</h1> -->
@@ -267,6 +275,8 @@ $all = $data->RetrieveAllPending();
           
           <!--Row-->
 
+          
+
           <!-- Documentation Link Remove-->
 
           <!-- Modal Logout -->
@@ -285,7 +295,7 @@ $all = $data->RetrieveAllPending();
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                  <a href="logout.php" class="btn btn-primary">Logout</a>
+                  <a href="logout" class="btn btn-primary">Logout</a>
                 </div>
               </div>
             </div>
@@ -355,6 +365,7 @@ $all = $data->RetrieveAllPending();
     <script src="assets/js/loader.js"></script>
     <script src=""><?php include("config/msg_popup.php"); ?></script>
     <script src="assets/js/date-range.js"></script>
+    
 
     
 

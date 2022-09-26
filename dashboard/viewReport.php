@@ -6,6 +6,7 @@ $data = new controllerClass();
 $id = $_GET['id'];
 $data->setId($id);
 
+
 if(isset($_GET['edit'])){
     $data->getname($_POST['name']);
     $data->getcompany($_POST['company']);
@@ -17,6 +18,8 @@ if(isset($_GET['edit'])){
 $record = $data->fetchOne();
 
 $val=$record[0];
+
+
 
 ?>
 
@@ -33,18 +36,18 @@ $val=$record[0];
     <link rel="stylesheet" href="assets/css/report.css">
     <style>
         table.table-bordered{
-    /* border:1px solid #333; */
+    border:1px solid #333;
     margin-top:20px;
     
    
   }
 table.table-bordered > thead > tr > th{
-    /* border:2px solid #333;
-    border:1px ; */
+    border:1px solid #333;
+    border:1px ;
    
 }
 table.table-bordered > tbody > tr > td{
-    /* border: 1px #333 solid; */
+    border:1px solid #333;
     text-align:center;
     word-wrap: break-all;
     padding: auto;
@@ -67,10 +70,10 @@ color: #757575;
     <table class="body-wrap">
         <tbody><tr>
             <td></td>
-            <td class="container" width="100">
+            <td class="container" width="100%">
                 <div class="content">
                     <table class="main" width="100%" cellpadding="0" cellspacing="0">
-                        <tbody><tr style="border: 1px #333 solid">
+                        <tbody><tr>
                             <td class="content-wrap aligncenter">
                                 <table width="100%" cellpadding="0" cellspacing="0">
                                     <tbody><tr>
@@ -82,19 +85,20 @@ color: #757575;
                                     <b><h2>Maintenance Request Form</h2></b>
                                         <td class="content-block" >
                                    
-                                            <table class="table align-items-center  display responsive nowrap" style="border: 1px #333 solid;">
-                                                <tbody style="border: 1px #333 solid;">
-                                                <tr><td style="border: 1px #333 solid;"><b>RsNo.:</b>&nbsp;<?php echo $val['id'];?></td><br>
-                                                <td style="border: 1px #333 solid;"><b>Date Request:</b>&nbsp;<?php echo $val['date_request'];?><br></td></tr>
-                                                    <tr><td style="border: 1px #333 solid;"><b>Name:</b>&nbsp;<?php echo $val['name'];?></td><br>
-                                                    <td rowspan="2"  style="border: 1px #333 solid; text-align:left;word-wrap: break-word;min-width: 160px;max-width: 160px;"><b>Remarks:</b>&nbsp;<?php echo $val['remarks'];?></td><br>
-                                                    <tr><td style="border: 1px #333 solid;"><b>Company:</b>&nbsp;<?php echo $val['company'];?></td><br></tr>
-                                                <tr><td style="border: 1px #333 solid;"><b>Department:</b>&nbsp;<?php echo $val['department'];?></td><br>
-                                                <td></td>
+                                            <table class="table table-bordered align-items-center  display responsive nowrap" style="border:1 solid black;">
+                                                <tbody>
+                                                <tr><td><b>RsNo.:</b>&nbsp;<?php echo $val['id'];?></td><br>
+                                                <td><b>Date Request:</b>&nbsp;<?php echo $val['date_request'];?><br></td></tr>
+                                                    <tr><td><b>Name:</b>&nbsp;<?php echo $val['name'];?></td><br>
+                                                    <td><b>Date End:</b>&nbsp;<?php echo $val['date_finish'];?></td>
+                                                    <tr><td><b>Company:</b>&nbsp;<?php echo $val['company'];?></td><br>
+                                                    <td rowspan="2"  style="text-align:left;word-wrap: break-word;min-width: 160px;max-width: 160px;"><b>Remarks:</b>&nbsp;<?php echo $val['remarks'];?></td></tr>
+                                                <tr><td><b>Department:</b>&nbsp;<?php echo $val['department'];?></td><br>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                               
+
                                             <div style="padding-top:100px;"></div>
                                             <div style="float:left;">
                                             Requested By:
@@ -106,6 +110,7 @@ color: #757575;
                                             <input type="text" class="signature" value="Junrey"/>
                                             <div style="padding-left:120px;">signature over <br>printed name</div><br>
                                             </div>
+
                                     </tr>
                                 </tbody></table>
                                 <div class="footer">

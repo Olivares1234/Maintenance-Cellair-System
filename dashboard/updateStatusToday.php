@@ -10,7 +10,7 @@ require 'phpmailer/src/SMTP.php';
 
 require_once('functions.php');
 	
-	if(isset($_POST['update'])){
+	if(isset($_POST['bupdate'])){
 
 		require_once 'controllerClass.php';
 		
@@ -30,7 +30,6 @@ require_once('functions.php');
 	    if(!$update){
 
 			try{
-			
 			$mail = new PHPMailer(true);     
 
 			
@@ -74,21 +73,23 @@ require_once('functions.php');
 
 			flash("msg3","Successfully Send Done!");
 				// echo "<script>document.location='pendingRequest.php'</script>";
-				header("Location:pendingRequest");
+				header("Location:newRequest");
 				// echo "<script>document.location='pendingRequest.php'</script>";
-			}
-			catch(PDOException $ex){
-			   return $ex->getMessage();
-			}
+            }
+            catch(PDOException $ex){
+               return $ex->getMessage();
+            }
 
 		}
 		else{
-			  flash("msg4","Error Send!");
+				// flash("msg3","Successfully Send Done!");
 				// echo "<script> alert('data saved successfully');document.location='pendingRequest.php'</script>";
 				// header("Location:pendingRequest.php");
 
 				
-	
+                flash("msg4","Error Send!");
+				// echo "<script>document.location='pendingRequest.php'</script>";
+				header("Location:newRequest");
 
 		}
 		
@@ -108,7 +109,7 @@ require_once('functions.php');
 <?php
 
 
-if(isset($_POST['update'])){
+if(isset($_POST['bupdate'])){
     // include("location: ../classes/class_registerConfig.php");
 	require_once 'controllerClass.php';
 	// $stm = $this->con_Db->prepare("INSERT INTO tbl_timeline(name, description, status, start_date, end_date) values(?, ?, ?, ?, ?)");
