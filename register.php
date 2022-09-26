@@ -69,7 +69,7 @@ require_once("config/register_config.php");
  				<!-- <button>Sign Up</button> -->
 				<br>
 				<span>
-				<em style="font-size:1.1em;">Already have an account? <a href="index.php" style="color:#fff; font-size:1.1em">Login here</a></em>
+				<em style="font-size:1.1em;">Already have an account? <a href="index" style="color:#fff; font-size:1.1em">Login here</a></em>
 				</span>
                 </center>
  		  </form>
@@ -81,7 +81,22 @@ require_once("config/register_config.php");
  <script src="public/src/jquery-3.6.0.js"></script>
  <script src="public/src/toastr.min.js"></script>
  <script src="public/src/toastr-options.js"></script>
- <script src="public/src/loader.js"></script>
- <script>// message popup info<?php include("config/msg_popup.php"); ?></script>
+ <script>
+
+	//windows loader animation fading.
+	$(window).on("load",function(){
+        $(".loader").fadeOut(1000);
+        $(".content").fadeIn(1000);
+      });
+
+	<?php if(isset($_SESSION['msg1'])): ?>
+		toastr.info("<?php echo flash('msg1'); ?>");
+		<?php endif ?>
+
+
+		<?php if(isset($_SESSION['msg2'])): ?>
+		toastr.error("<?php echo flash('msg2'); ?>");
+		<?php endif ?>
+ </script>
 </body>
 </html>
