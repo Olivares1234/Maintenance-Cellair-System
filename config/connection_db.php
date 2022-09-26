@@ -8,15 +8,15 @@ if(!defined("DB_HOST")){
 
 }
 if(!defined("DB_NAME")){
-    define("DB_NAME","maintenancedb");
+    define("DB_NAME","cellairc_maintenancedb");
 }
 
 if(!defined("DB_PWD")){
-    define("DB_PWD","");
+    define("DB_PWD","mtcsystem123");
 }
 
 if(!defined("DB_USER")){
-    define("DB_USER","root");
+    define("DB_USER","cellairc_mtcuser");
 }
   
 ?>

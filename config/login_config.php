@@ -18,14 +18,14 @@ if(isset($_POST['btnsign'])){
 
     if($login){
 
-        header("Location:../dashboard/home.php");
+        header("Location:../dashboard/home");
         // flash("msg1","  Success!");
 
     }else{
 
         flash("msg2","Check UserName & Password Correctly Does Not Exists!");
 
-        header("Location:../index.php");
+        header("Location:../index");
         // echo "<script>alert('Error');document.location='../../index.php'</script>";
 
     }
