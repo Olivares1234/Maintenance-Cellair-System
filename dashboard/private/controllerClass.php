@@ -7,6 +7,7 @@ include("connection_db.php");
 class controllerClass{
     private $id;
     private $name;
+    private $email;
     private $company;
     private $department;
     private $date_request;
@@ -15,9 +16,10 @@ class controllerClass{
 
     protected $con_Db;
  
- public function __construct($id=0, $name="", $company="", $department="", $date_request="", $remarks="", $status=""){
+ public function __construct($id=0, $name="", $email="", $company="", $department="", $date_request="", $remarks="", $status=""){
     $this->id=$id;
     $this->name=$name;
+    $this->email=$email;
     $this->company=$company;
     $this->department=$department;
     $this->date_request=$date_request;
@@ -27,7 +29,6 @@ class controllerClass{
     $this->con_Db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
  
     // $this->dbCnx = new PDO("mysql:host=localhost;dbname=registration;", "root", "");
- 
  }
    public function setId($id){
       $this->id=$id;
@@ -40,6 +41,12 @@ class controllerClass{
     }
     public function getname(){
       return $this->name;
+    }
+   public function setemail($email){
+      $this->email=$email;
+    }
+    public function getemail(){
+      return $this->email;
     }
     public function setcompany($company){
        $this->company=$company;
@@ -75,8 +82,8 @@ class controllerClass{
     public function insertData(){ // Inserting Data Request Form.
 
        try {
-       $stm = $this->con_Db->prepare("INSERT INTO tbl_request(name, company, department, date_request, remarks, status) values(?, ?, ?, ?, ?, ?)");
-       $stm->execute([$this->name, $this->company, $this->department, $this->date_request, $this->remarks, $this->status]);
+       $stm = $this->con_Db->prepare("INSERT INTO tbl_request(name, email, company, department, date_request, remarks, status) values(?, ?, ?, ?, ?, ?, ?)");
+       $stm->execute([$this->name, $this->email, $this->company, $this->department, $this->date_request, $this->remarks, $this->status]);
       //  echo "<script>alert('data saved successfully');document.location='../../index.php'</script>";
       
 
