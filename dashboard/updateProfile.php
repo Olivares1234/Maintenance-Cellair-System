@@ -92,9 +92,9 @@ if(isset($_POST['update'])){
   <meta name="description" content="">
   <meta name="author" content="Gab">
   <link href="assets/img/logo/repair.png" rel="icon">
-  <title>Maintenance-Systems - Dashboard</title>
-
-  <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <title>Maintenance-Systems - Update Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <!--<link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="assets/css/ruang-admin.min.css" rel="stylesheet">
   <link href="assets/css/tooptip_style.css" rel="stylesheet">
@@ -190,10 +190,10 @@ if(isset($_POST['update'])){
             <!-- dropdown message remove -->
 
              <!-- Start Topbar -->
-            <div class="topbar-divider d-none d-sm-block"></div>
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
+                  <div class="topbar-divider d-none d-sm-block"></div>
                 <img class="img-profile rounded-circle" src="uploaded_img\<?= $_SESSION['image']; ?>" style="max-width: 60px">
                 <span class="d-lg-inline text-white small">&nbsp;&nbsp;<?php echo $_SESSION["username"];?></span>
               </a>

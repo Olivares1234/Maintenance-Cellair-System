@@ -1,3 +1,7 @@
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -9,121 +13,165 @@ require 'phpmailer/src/SMTP.php';
 
 
 require_once('functions.php');
-	
-	if(isset($_POST['bupdate'])){
 
-		require_once 'controllerClass.php';
-		
-		$data = new controllerClass();
-		$data->setId($_POST['id']);
-		$data->setname($_POST['name']);
-		$data->setemail($_POST['email']);
-		$data->setcompany($_POST['company']);
-		$data->setdepartment($_POST['department']);
-		$data->setdate_request($_POST['date_request']);
-		$data->setdate_finish($_POST['date_finish']);
-		$data->setremarks($_POST['remarks']);
-		$data->setstatus($_POST['status'] ='Done');
-	
-		$update = $data->update();
+if (isset($_POST['update'])) {
 
-	    if(!$update){
+  require_once 'controllerClass.php';
+  $data = new controllerClass();
+  $data->setId($_POST['id']);
+  $data->setname($_POST['name']);
+  $data->setemail($_POST['email']);
+  $data->setcompany($_POST['company']);
+  $data->setdepartment($_POST['department']);
+  $data->setdate_request($_POST['date_request']);
+  $data->setdate_finish($_POST['date_finish']);
+  $data->setremarks($_POST['remarks']);
+  $data->setstatus(1); // Corrected
+  $data->setfeedback($_POST['feedback']);
 
-			try{
-			$mail = new PHPMailer(true);     
+  $update = $data->update();
 
-			
-				//Server settings
-				$mail->isSMTP();                                     
-				$mail->Host = 'smtp.gmail.com';                     
-		
-				$mail->SMTPAuth = true;                             
-				$mail->Username = 'gabolivares63@gmail.com';     
-				$mail->Password = 'vcqihabipcpqwkgo';             
-				$mail->SMTPOptions = array(
-					'ssl' => array(
-					'verify_peer' => false,
-					'verify_peer_name' => false,
-					'allow_self_signed' => true
-					)
-				);                         
-				$mail->SMTPSecure = 'ssl';                           
-				$mail->Port = 465;                                   
-		
-				//Send Email
-				$mail->setFrom('gabolivares63@gmail.com');
-				
-				//Recipients
-				$mail->addAddress($data->getemail($_POST['email']));              
-				$mail->addReplyTo($data->getemail($_POST['email']));
-				
-				
-				//Content
-				$mail->isHTML(true);                                  
-				$mail->Subject = $subject = "EMC MAINTENANCE TEAM";
-				$mail->Body    = $message = "<img src='http://mtctest.cellaircorp.com/dashboard/image/repair.gif' height='200'><br><h4>Successfully Done Request!<br>"."Description: ".$data->getremarks($_POST['remarks'])."<br>Status: ".$data->getstatus($_POST['status'])."<br>Date Request: ".$data->getdate_request($_POST['date_request'])."<br>Date End: ".$data->getdate_finish($_POST['date_finish'])."</h4>";
+  $datalogs = new logsController();
+  $datalogs->setusername($_SESSION['username'] .
+    $datalogs->setaction('Update Status Done! - ' .
+      $data->getremarks() . ' to ' .
+      $data->getname() . ', ' .
+      $data->getdepartment() . ', ' .
+      $data->getcompany()));
 
-				$mail->send();
-
-			//    $_SESSION['result'] = 'Message has been sent';
-			//    $_SESSION['status'] = 'ok';
-		
-			// echo "send";
-			// header("location: index.php");
-
-			flash("msg3","Successfully Send Done!");
-				// echo "<script>document.location='pendingRequest.php'</script>";
-				header("Location:newRequest");
-				// echo "<script>document.location='pendingRequest.php'</script>";
-            }
-            catch(PDOException $ex){
-               return $ex->getMessage();
-            }
-
-		}
-		else{
-				// flash("msg3","Successfully Send Done!");
-				// echo "<script> alert('data saved successfully');document.location='pendingRequest.php'</script>";
-				// header("Location:pendingRequest.php");
-
-				
-                flash("msg4","Error Send!");
-				// echo "<script>document.location='pendingRequest.php'</script>";
-				header("Location:newRequest");
-
-		}
-		
-
-			// echo "<script> alert('data saved successfully');document.location='pendingRequest.php'</script>";
+  $datalogs->insertActionLogs();
 
 
-		
-		   
-			//Load composer's autoloader
-		
-		
-		}
-		
+  if (!$update) {
+
+    try {
+
+      $mail = new PHPMailer(true);
+
+
+      //Server settings
+      $mail->isSMTP();
+      $mail->Host = 'smtp.gmail.com';
+      $mail->SMTPAuth = true;
+      $mail->Username = 'gabolivares63@gmail.com';
+      $mail->Password = 'vtjoafhiihdyrfsy';
+      // $mail->Username = 'junrey.exelpack@gmail.com';
+      // $mail->Password = 'gjtyytiqtuduucwb';
+      $mail->SMTPOptions = array(
+        'ssl' => array(
+          'verify_peer' => false,
+          'verify_peer_name' => false,
+          'allow_self_signed' => true
+        )
+      );
+      $mail->SMTPSecure = 'ssl';
+      $mail->Port = 465;
+
+      //Send Email
+      $mail->setFrom('gabolivares63@gmail.com', 'Maintenance EMC Team');
+
+      //Recipients
+      $mail->addAddress($data->getemail($_POST['email']));
+      $mail->addReplyTo($data->getemail($_POST['email']));
+
+      //Content
+      $mail->isHTML(true);
+      $mail->Subject = $subject = "EMC MAINTENANCE TEAM";
+      $statusValue = $data->getstatus($_POST['status']);
+      $statusText = $statusValue === 1 ? "Done" : "Pending";
+
+      $mail->Body = $message = "<img src='https://loader.exel-portal.com/repair.gif' height='200'><br>" .
+        "<h4>We are informing you that your request has been successfully accomplished by EMMC Maintenance. 
+This message serves as a confirmation that the task you submitted has been completed and resolved.</h4>" .
+        "<h4>Successfully Done Request!<br></h4>"
+        . "<table style='border: 1px solid #ccc; width:50%;'>
+<tr>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>MR#: </th>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>" . $data->getId($_POST['id']) . "</th>
+</tr>
+<tr>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>Request Description: </th>
+<th style='border: 1px solid #ccc; background-color: #eaecf4; white-space: normal !important; text-align: justify;'>" . $data->getremarks($_POST['remarks']) . "</th>
+</tr>
+<tr>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>Status: </th>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'> " . $statusText . "</th>
+</tr>
+<tr>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>Date Request: </th>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'> " . date('m-d-Y', strtotime($data->getdate_request($_POST['date_request']))) . "</th>
+</tr>
+<tr>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>Date End:  </th>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'> " . date('m-d-Y', strtotime($data->getdate_finish($_POST['date_finish']))) . "</th>
+</tr>
+<tr>
+<th style='border: 1px solid #ccc; background-color: #eaecf4;'>Description of Completed Work:  </th>
+<th style='border: 1px solid #ccc; background-color: #eaecf4; white-space: normal !important; text-align: justify;'> " . $data->getfeedback($_POST['feedback']) . "</th>
+</tr>
+</table>" .
+        "<h4 style='color:red;'>This Email is Auto Generated By The System.</h4>";
+      $mail->send();
+
+
+
+
+      flash("msg3", "Successfully Send Done!");
+      // echo "<script>alert('done');document.location='pendingRequest.php'</script>";
+      header("Location:pendingRequest");
+      // echo "<script>document.location='pendingRequest.php'</script>";
+
+
+      //    $_SESSION['result'] = 'Message has been sent';
+      //    $_SESSION['status'] = 'ok';
+
+    } catch (PDOException $ex) {
+      return $ex->getMessage();
+    }
+  } else {
+    flash("msg4", "Error Send!");
+    // echo "<script> alert('data saved successfully');document.location='pendingRequest.php'</script>";
+    // header("Location:pendingRequest.php");
+
+
+
+
+  }
+
+
+  // echo "<script> alert('data saved successfully');document.location='pendingRequest.php'</script>";
+
+
+
+
+  //Load composer's autoloader
+
+
+}
+
 ?>
 
 <?php
 
 
-if(isset($_POST['bupdate'])){
-    // include("location: ../classes/class_registerConfig.php");
-	require_once 'controllerClass.php';
-	// $stm = $this->con_Db->prepare("INSERT INTO tbl_timeline(name, description, status, start_date, end_date) values(?, ?, ?, ?, ?)");
-	$datas = new controllerClass();
-	$datas->setname($_POST['name']);
-	$datas->setremarks($_POST['remarks']);
-	$datas->setstatus($_POST['status'] ='Done');
-	$datas->setdate_request($_POST['date_request']);
-	$datas->setdate_finish($_POST['date_finish']);
-	$datas->insertData_TimeLine();
-
-
-    }
+if (isset($_POST['update'])) {
+  // include("location: ../classes/class_registerConfig.php");
+  require_once 'controllerClass.php';
+  // $stm = $this->con_Db->prepare("INSERT INTO tbl_timeline(name, description, status, start_date, end_date) values(?, ?, ?, ?, ?)");
+  $datas = new controllerClass();
+  $datas->setname($_POST['name']);
+  $datas->setremarks($_POST['remarks']);
+  $datas->setstatus($_POST['status'] = 'Done');
+  $datas->setdate_request($_POST['date_request']);
+  $datas->setdate_finish($_POST['date_finish']);
+  $datas->insertData_TimeLine();
+}
 
 
 ?>
 
+
+<!-- Add jQuery (required by Bootstrap) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

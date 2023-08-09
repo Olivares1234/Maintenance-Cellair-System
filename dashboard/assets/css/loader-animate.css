@@ -16,7 +16,7 @@
     width: 60%;
     position: absolute;
     margin: auto;
-    top: auto;
+    top: 10px;
     bottom: auto;
     left: 0;
     right: 0;
@@ -25,5 +25,5 @@
 }
 
 body.noscroll {
-    overflow: hidden;
+    /*overflow: hidden;*/
 }

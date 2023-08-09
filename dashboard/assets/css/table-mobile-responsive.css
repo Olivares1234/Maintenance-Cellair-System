@@ -1,0 +1,2 @@
+    table th, table td { white-space: normal; }
+.child {table-layout:fixed} .child td {word-wrap:break-word; white-space: normal !important;}

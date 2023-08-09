@@ -10,7 +10,8 @@ require_once("config/register_config.php");
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8">
 	<link href="public/img/repair.png" rel="icon">
-    <link rel="stylesheet" type="text/css" href="public/assets/fontawesome/css/all.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="public/assets/fontawesome/css/all.min.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 	<link rel="stylesheet" type="text/css" href="public/assets/css/reg_style.css">
 	<link rel="stylesheet" type="text/css" href="public/assets/css/toastr.min.css">
 	<link rel="stylesheet" type="text/css" href="public/assets/css/loader_animate.css">

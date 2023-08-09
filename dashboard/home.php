@@ -24,8 +24,8 @@ $totalpends = $totalpending->recordAllPending(); //Count PendingTotal Status
 // $totalreqTodays = $totalreqToday->RetrieveRequestToday(); //Count PendingTotal Status
 // echo $totalpends;
 
-//Count Show widget Total Residents Vaccinated Today
-$sql_count =  "SELECT COUNT(*) FROM tbl_request WHERE date_request = CURDATE()";
+//Count new date request
+$sql_count =  "SELECT COUNT(*) FROM tbl_request WHERE status='pending' AND date_request = CURDATE()";
 $result =  mysqli_query($conn, $sql_count);
 	  while($row = mysqli_fetch_array($result)){
         $total = $row[0];

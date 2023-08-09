@@ -1,6 +1,6 @@
 <?php
 
-include("connection_db.php");
+include("../config/connection_db.php"); 
 
 //setup connection db
 class loginConfig{
@@ -60,8 +60,10 @@ class loginConfig{
             session_start();
             $_SESSION['id'] = $user[0]['id'];
             $_SESSION['username'] = $user[0]['username'];
+            $_SESSION['email'] = $user[0]['email'];
             $_SESSION['password'] = $user[0]['password'];
             $_SESSION['role'] = $user[0]['role'];
+            $_SESSION['image'] = $user[0]['image'];
             return true;
 
          } else {
@@ -71,6 +73,57 @@ class loginConfig{
          return $e-> getMessage();
       }
    }
+}
+
+class logsController
+{
+  // private $id;
+  private $username;
+  private $action;
+  protected $con_Db;
+
+
+  public function __construct($username = '', $action = '')
+  {
+    // $this->id = $id;
+    $this->username = $username;
+    $this->action = $action;
+
+    //setup connection db
+    include("../config/connection_db.php");
+    $this->con_Db = new PDO(DB_TYPE . ":host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PWD, [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
+
+    // $this->dbCnx = new PDO("mysql:host=localhost;dbname=registration;", "root", "");
+
+  }
+  public function setusername($username)
+  {
+    $this->username = $username;
+  }
+  public function getusername()
+  {
+    return $this->username;
+  }
+
+  public function setaction($action)
+  {
+    $this->action = $action;
+  }
+  public function getaction()
+  {
+    return $this->action;
+  }
+
+  public function insertActionLogs()
+  { // Inserting Data Timeline.
+    try {
+      $stm = $this->con_Db->prepare("INSERT INTO tbl_logs(username, action) values(?, ?)");
+      $stm->execute([$this->username, $this->action]);
+      //  echo "<script>alert('data saved successfully');document.location='../../index.php'</script>";
+    } catch (Exception $e) {
+      return $e->getMessage();
+    }
+  }
 }
  
    //  public function insertData(){ // Inserting Data Register.
@@ -153,8 +206,3 @@ class loginConfig{
  
  
 //  }
-
-
-
-
-?>

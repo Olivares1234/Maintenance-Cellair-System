@@ -4,7 +4,6 @@ if(isset($_SESSION["username"])){
 	$_SESSION["username"];
 }
 else{
-	header("Location:login");
+	header("Location:login.php");
 	die();
 }
-?>

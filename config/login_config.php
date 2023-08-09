@@ -1,37 +1,36 @@
 <?php
 
-    session_start();
+session_start();
 
-    require_once('functions.php');
-
-
-if(isset($_POST['btnsign'])){
-    // include('../classes/class_loginConfig.php');
-    require_once("../public/classes/class_loginConfig.php");
-    
-    $info = new loginConfig();
-    $info->setusername($_POST['username']);
-    $info->setpassword($_POST['password']);
-
-    $login = $info->login();
+require_once('functions.php');
 
 
-    if($login){
+if (isset($_POST['btnsign'])) {
+  // include('../classes/class_loginConfig.php');
+  require_once("../public/classes/class_loginConfig.php");
 
-        header("Location:../dashboard/home");
-        // flash("msg1","  Success!");
+  $info = new loginConfig();
+  $info->setusername($_POST['username']);
+  $info->setpassword($_POST['password']);
+  $login = $info->login();
 
-    }else{
+  $actionlogs = new logsController();
 
-        flash("msg2","Check UserName & Password Correctly Does Not Exists!");
+  $actionlogs->setusername($_POST['username']);
+  $actionlogs->setaction($_POST['action'] = 'login Attempt!');
 
-        header("Location:../index");
-        // echo "<script>alert('Error');document.location='../../index.php'</script>";
 
+  if ($login) {
+    // Assuming you have a 'role' variable stored in the session after successful login
+    if ($_SESSION['role'] === 'admin') {
+      header("Location: ../dashboard/home.php");
+      $actionlogs->insertActionLogs();
+    } elseif ($_SESSION['role'] === 'user') {
+      header("Location: ../dashboard/formRequest.php");
+      $actionlogs->insertActionLogs();
     }
+  } else {
+    flash("msg2", "Check UserName & Password Correctly Does Not Exist!");
+    header("Location: ../index.php");
+  }
 }
-   
-
-
-
-?>

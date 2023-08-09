@@ -87,7 +87,7 @@ color: #757575;
                                    
                                             <table class="table table-bordered align-items-center  display responsive nowrap" style="border:1 solid black;">
                                                 <tbody>
-                                                <tr><td><b>RsNo.:</b>&nbsp;<?php echo $val['id'];?></td><br>
+                                                <tr><td><b>MR#:</b>&nbsp;<?php echo $val['id'];?></td><br>
                                                 <td><b>Date Request:</b>&nbsp;<?php echo $val['date_request'];?><br></td></tr>
                                                     <tr><td><b>Name:</b>&nbsp;<?php echo $val['name'];?></td><br>
                                                     <td><b>Date End:</b>&nbsp;<?php echo $val['date_finish'];?></td>

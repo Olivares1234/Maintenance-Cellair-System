@@ -33,6 +33,3 @@ if(isset($_POST['btnreg'])){
        
     }
     }
-
-
-?>

@@ -13,4 +13,3 @@ function flash($name, $text = ''){
 return '';
 
 }
-?>
