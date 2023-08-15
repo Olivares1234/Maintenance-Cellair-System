@@ -246,7 +246,7 @@ class controllerClass
     try {
 
       $stm = $this->con_Db->prepare("SELECT * FROM tbl_request WHERE status=?");
-      $stm->execute([$this->status = 'Done']);
+      $stm->execute([$this->status = '1']);
       $total = $stm->rowCount();
       return $total;
       // echo "<script>alert('data deleted successfully');document.location='.php'</script>";
@@ -282,7 +282,6 @@ class controllerClass
       $total = $stm->rowCount();
       return $total;
       // echo "<script>alert('data deleted successfully');document.location='.php'</script>";
-
     } catch (PDOException $ex) {
       return $ex->getMessage();
     }
@@ -349,6 +348,27 @@ class logsController
       $stm->bindParam(':username', $username, PDO::PARAM_STR);
       $stm->execute();
       return $stm->fetchAll();
+    } catch (PDOException $ex) {
+      return $ex->getMessage();
+    }
+  }
+
+  public function getNextAvailableID($tableName)
+  {
+    try {
+      $sql = "SELECT MAX(id) AS max_id FROM $tableName";
+      $stm = $this->con_Db->prepare($sql);
+      $stm->execute();
+      $row = $stm->fetch(PDO::FETCH_ASSOC);
+      $max_id = $row['max_id'];
+
+      // Increment the numeric part of the ID
+      $next_numeric_id = intval($max_id) + 1;
+
+      // Format the numeric part to have leading zeros
+      $next_id = str_pad($next_numeric_id, 5, '0', STR_PAD_LEFT);
+
+      return $next_id;
     } catch (PDOException $ex) {
       return $ex->getMessage();
     }

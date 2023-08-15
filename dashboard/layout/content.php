@@ -95,10 +95,11 @@
                     </select>
                   </div>
 
-                  <div class="form-group lblname">
-                    <label for="dropdown">REQUEST FOR:</label>
+                  <div class="form-group">
+                    <label for="exampleFormControlSelect1" class="lblname">REQUEST FOR:</label>
                     <span style="color: red; font-size:larger;">*</span>
-                    <select class="form-control" name="requestfor" id="dropdown" onchange="toggleInputField()">
+                    <select class="form-control" name="requestfor" id="dropdown" onchange="toggleInputField()" required>
+                      <option value="">SELECT REQUEST...</option>
                       <option value="machine / equipment">MACHINE / EQUIPMENT</option>
                       <option value="vehicle">VEHICLE</option>
                       <option value="facility">FACILITY</option>
@@ -171,7 +172,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                    <a href="logout" class="btn btn-primary">Logout</a>
+                    <a href="logout.php" class="btn btn-primary">Logout</a>
                   </div>
                 </div>
               </div>

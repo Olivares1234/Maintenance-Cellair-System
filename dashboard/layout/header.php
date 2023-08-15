@@ -70,7 +70,7 @@
 
       <?php if ($_SESSION['role'] != 'user') { ?>
         <li class="nav-item active">
-          <a class="nav-link" href="home">
+          <a class="nav-link" href="home.php">
             <i class="fa fa-home" aria-hidden="true"></i>
             <span>Dashboard</span></a>
         </li>
@@ -80,7 +80,7 @@
       <?php if ($_SESSION['role'] != 'admin') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item active">
-          <a class="nav-link" href="formRequest">
+          <a class="nav-link" href="formRequest.php">
             <i class="fas fa-file-invoice"></i>
             <span>Form Request</span></a>
         </li>
@@ -90,7 +90,7 @@
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="doneRequest">
+          <a class="nav-link" href="doneRequest.php">
             <i class="fas fa-clipboard-check"></i>
             <span>Done Request</span></a>
         </li>
@@ -100,7 +100,7 @@
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="pendingRequest">
+          <a class="nav-link" href="pendingRequest.php">
             <i class="fas fa-comments"></i>
             <span>Pending Request</span></a>
         </li>
@@ -110,7 +110,7 @@
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="newRequest">
+          <a class="nav-link" href="newRequest.php">
             <i class="fas fa-users"></i>
             <span>New Request Today</span></a>
         </li>

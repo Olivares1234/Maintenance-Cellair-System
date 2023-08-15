@@ -1,11 +1,10 @@
 <?php
 session_start();
-if(isset($_SESSION["username"])){
-	$_SESSION["username"];
-}
-else{
-	header("Location:../index.php");
-	die();
+if (isset($_SESSION["username"])) {
+  $_SESSION["username"];
+} else {
+  header("Location:../index.php");
+  die();
 }
 include("private/controllerClass.php");
 
@@ -27,11 +26,11 @@ $totalpends = $totalpending->recordAllPending(); //Count PendingTotal Status
 //Count new date request
 $sql_count =  "SELECT COUNT(*) FROM tbl_request WHERE status='pending' AND date_request = CURDATE()";
 $result =  mysqli_query($conn, $sql_count);
-	  while($row = mysqli_fetch_array($result)){
-        $total = $row[0];
-        $totalreqTodays = $total;					
-			}
-	
+while ($row = mysqli_fetch_array($result)) {
+  $total = $row[0];
+  $totalreqTodays = $total;
+}
+
 ?>
 
 <?php

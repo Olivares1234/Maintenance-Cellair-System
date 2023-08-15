@@ -67,7 +67,7 @@ $(function () {
         String(scheds[id].start_datetime).replace(" ", "\\t")
       );
       _form.find('[name="id"]').val(id);
-      _form.find('[name="name"]').val(scheds[id].name);
+      // _form.find('[name="name"]').val(scheds[id].name);
       _form.find('[name="description"]').val(scheds[id].description);
       _form
         .find('[name="start_date"]')

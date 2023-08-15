@@ -80,7 +80,7 @@ if (isset($_POST['update'])) {
       $statusValue = $data->getstatus($_POST['status']);
       $statusText = $statusValue === 1 ? "Done" : "Pending";
 
-      $mail->Body = $message = "<img src='https://loader.exel-portal.com/repair.gif' height='200'><br>" .
+      $mail->Body = $message = "<img src='https://loader.exel-portal.com/repairs.gif' height='200'><br>" .
         "<h4>We are informing you that your request has been successfully accomplished by EMMC Maintenance. 
 This message serves as a confirmation that the task you submitted has been completed and resolved.</h4>" .
         "<h4>Successfully Done Request!<br></h4>"
@@ -118,7 +118,7 @@ This message serves as a confirmation that the task you submitted has been compl
 
       flash("msg3", "Successfully Send Done!");
       // echo "<script>alert('done');document.location='pendingRequest.php'</script>";
-      header("Location:pendingRequest");
+      header("Location:newRequest.php");
       // echo "<script>document.location='pendingRequest.php'</script>";
 
 

@@ -36,7 +36,7 @@
             </div>
             <div class="col-6">
               <label><b>Date Request:</b></label>
-              <input type="date" name="date_request" value="<?php echo $val['date_request'] ?>" class="form-control" readonly />
+              <input type="text" name="date_request" value="<?php echo date('m-d-Y', strtotime($val['date_request'])); ?>" class="form-control" readonly />
             </div>
 
             <div class="col-6">

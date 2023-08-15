@@ -104,7 +104,7 @@ $all = $data->retrieveRequestToday();
 
       <?php if ($_SESSION['role'] != 'user') { ?>
         <li class="nav-item">
-          <a class="nav-link" href="home">
+          <a class="nav-link" href="home.php">
             <i class="fa fa-home" aria-hidden="true"></i>
             <span>Dashboard</span></a>
         </li>
@@ -114,7 +114,7 @@ $all = $data->retrieveRequestToday();
       <?php if ($_SESSION['role'] != 'admin') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="formRequest">
+          <a class="nav-link" href="formRequest.php">
             <i class="fas fa-file-invoice"></i>
             <span>Form Request</span></a>
         </li>
@@ -124,7 +124,7 @@ $all = $data->retrieveRequestToday();
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="doneRequest">
+          <a class="nav-link" href="doneRequest.php">
             <i class="fa-solid fa-clipboard-check"></i>
             <span>Done Request</span></a>
         </li>
@@ -134,7 +134,7 @@ $all = $data->retrieveRequestToday();
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="pendingRequest">
+          <a class="nav-link" href="pendingRequest.php">
             <i class="fas fa-comments"></i>
             <span>Pending Request</span></a>
         </li>
@@ -144,7 +144,7 @@ $all = $data->retrieveRequestToday();
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item active">
-          <a class="nav-link" href="newRequest">
+          <a class="nav-link" href="newRequest.php">
             <i class="fas fa-users"></i>
             <span>New Request Today</span></a>
         </li>
@@ -153,7 +153,7 @@ $all = $data->retrieveRequestToday();
       <div class="mb-2"></div>
       <!-- <hr class="sidebar-divider my-0"> -->
       <li class="nav-item">
-        <a class="nav-link" href="logs">
+        <a class="nav-link" href="logs.php">
           <i class="fa-solid fa-clipboard-user"></i>
           <span>Logs</span></a>
       </li>
@@ -273,7 +273,7 @@ $all = $data->retrieveRequestToday();
                     <table style="cellspacing:0; width:100%;" class="table align-items-center table-flush table-hover dt-responsive nowrap" id="example">
                       <thead class="thead-light">
                         <tr>
-                          <th>MR#</th>
+                          <th>MWO#</th>
                           <th>Name</th>
                           <th>Company</th>
                           <th>Department</th>
@@ -281,7 +281,7 @@ $all = $data->retrieveRequestToday();
                           <th>Remarks</th>
                           <th>Attached</th>
                           <th>Status</th>
-                          <th>Action</th>
+                          <!-- <th>Action</th> -->
                         </tr>
                       </thead>
                       <!-- <tfoot>
@@ -291,25 +291,37 @@ $all = $data->retrieveRequestToday();
                     </tfoot> -->
 
                       <tbody>
-                        <?php foreach ($all as $key => $val) { ?>
+                        <?php
+                        // date_default_timezone_set('Asia/Manila');
+                        date_default_timezone_set('Asia/Manila');
+                        foreach ($all as $key => $val) { ?>
                           <tr>
 
-                            <td><?php echo 'MR' . $val['id'] ?></td>
+                            <td><?php echo 'MWO' . $val['id'] ?></td>
                             <td><?php echo $val['name']; ?></td>
                             <td><?php echo $val['company']; ?></td>
                             <td><?php echo $val['department']; ?></td>
                             <td><?php echo date('m-d-Y', strtotime($val['date_request'])); ?></td>
                             <td style="white-space: normal !important;"><?php echo $val['remarks']; ?></td>
                             <td class="image">
-                              <button class="btn-outline custom-tooltip" style="padding: 0; cursor: pointer; background: none; border: none;" onclick="openImage('<?php echo 'upload/' . $val['image']; ?>')">
-                                <i class="fa-solid fa-link fa-2x" style="color: #32618e;"></i>
-                                <span class="tooltip-text">View Attached</span>
-                              </button>
+                              <?php if (!empty($val['image'])) : ?>
+                                <button class="btn-outline custom-tooltip" style="padding: 0; cursor: pointer; background: none; border: none;" onclick="openImage('<?php echo 'upload/' . $val['image']; ?>')">
+                                  <i class="fa-solid fa-link fa-2x" style="color: #32618e;"></i>
+                                  <span class="tooltip-text">View Attached</span>
+                                </button>
+                              <?php else : ?>
+                                <button disabled class="btn-outline custom-tooltip" style="padding: 0; cursor: pointer; background: none; border: none;" onclick="openImage('<?php echo 'upload/' . $val['image']; ?>')">
+                                  <i class="fa-regular fa-circle-xmark fa-2x" style="color: #32618e;"></i>
+                                  <span class="tooltip-text">No Upload File!</span>
+                                </button>
+                              <?php endif; ?>
                             </td>
                             <td>
                               <?php echo ($val['status'] == 0) ? '<span class="badge badge-danger">Pending</span>' : '<span class="badge badge-success">Done</span>'; ?>
                             </td>
-                            <td><a class="btn-outline" tooltip="Edit" flow="up" data-toggle="modal" href="#" data-target="#update_modal<?php echo $val['id'] ?>"><i class="fas fa-pen-square fa-2x"></i></a></td>
+                            <!-- <td><a class="btn-outline" tooltip="Edit" flow="up" data-toggle="modal" href="#"
+                            data-target="#update_modal<php echo $val['id'] ?>"><i
+                              class="fas fa-pen-square fa-2x"></i></a></td> -->
                           </tr>
                         <?php include 'modalPendsToday.php';
                         } ?>
@@ -343,7 +355,7 @@ $all = $data->retrieveRequestToday();
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                    <a href="logout" class="btn btn-primary">Logout</a>
+                    <a href="logout.php" class="btn btn-primary">Logout</a>
                   </div>
                 </div>
               </div>
@@ -415,9 +427,7 @@ $all = $data->retrieveRequestToday();
   <script src="assets/js/date-range.js"></script>
 
   <script src="assets/js/loader.js"></script>
-  <script>
-    <?php include "private/msg_popup.php";  ?>
-  </script>
+
 
   <script>
     $(document).ready(function() {
@@ -451,6 +461,8 @@ $all = $data->retrieveRequestToday();
     $(function() {
       $('[data-toggle="tooltip"]').tooltip();
     });
+
+    <?php include "private/msg_popup.php";  ?>
   </script>
 
 

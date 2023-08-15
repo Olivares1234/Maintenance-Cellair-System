@@ -219,7 +219,7 @@ if (!isset($user_id)) {
                           <h3><?= $fetch_profile['username']; ?></h3>
                         </center>
                         <a href="updateProfile" class="btn1">update profile</a>
-                        <a href="logout" class="delete-btn" data-toggle="modal" data-target="#logoutModal">logout</a>
+                        <a href="logout.php" class="delete-btn" data-toggle="modal" data-target="#logoutModal">logout</a>
                         <!-- <div class="flex-btn">
                             <a href="login.php" class="option-btn">login</a>
                             <a href="register.php" class="option-btn">register</a>

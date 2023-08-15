@@ -104,7 +104,7 @@ $all = $data->RetrieveAllPending(0);
 
       <?php if ($_SESSION['role'] != 'user') { ?>
         <li class="nav-item">
-          <a class="nav-link" href="home">
+          <a class="nav-link" href="home.php">
             <i class="fa fa-home" aria-hidden="true"></i>
             <span>Dashboard</span></a>
         </li>
@@ -114,7 +114,7 @@ $all = $data->RetrieveAllPending(0);
       <?php if ($_SESSION['role'] != 'admin') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="formRequest">
+          <a class="nav-link" href="formRequest.php">
             <i class="fas fa-file-invoice"></i>
             <span>Form Request</span></a>
         </li>
@@ -124,7 +124,7 @@ $all = $data->RetrieveAllPending(0);
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="doneRequest">
+          <a class="nav-link" href="doneRequest.php">
             <i class="fa-solid fa-clipboard-check"></i>
             <span>Done Request</span></a>
         </li>
@@ -134,7 +134,7 @@ $all = $data->RetrieveAllPending(0);
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item active">
-          <a class="nav-link" href="pendingRequest">
+          <a class="nav-link" href="pendingRequest.php">
             <i class="fas fa-comments"></i>
             <span>Pending Request</span></a>
         </li>
@@ -144,7 +144,7 @@ $all = $data->RetrieveAllPending(0);
       <?php if ($_SESSION['role'] != 'user') { ?>
         <!-- <hr class="sidebar-divider my-0"> -->
         <li class="nav-item">
-          <a class="nav-link" href="newRequest">
+          <a class="nav-link" href="newRequest.php">
             <i class="fas fa-users"></i>
             <span>New Request Today</span></a>
         </li>
@@ -153,7 +153,7 @@ $all = $data->RetrieveAllPending(0);
       <div class="mb-2"></div>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
-        <a class="nav-link" href="logs">
+        <a class="nav-link" href="logs.php">
           <i class="fa-solid fa-clipboard-user"></i>
           <span>Logs</span></a>
       </li>
@@ -292,7 +292,11 @@ $all = $data->RetrieveAllPending(0);
                     </tfoot> -->
 
                       <tbody>
-                        <?php foreach ($all as $key => $val) { ?>
+
+                        <?php
+                        // date_default_timezone_set('Asia/Manila');
+                        date_default_timezone_set('Asia/Manila');
+                        foreach ($all as $key => $val) { ?>
                           <tr>
                             <td><?php echo 'MWO' . $val['id'] ?></td>
                             <td><?php echo $val['name']; ?></td>
@@ -320,12 +324,16 @@ $all = $data->RetrieveAllPending(0);
                               <a class="btn-outline" tooltip="Edit" flow="up" data-toggle="modal" href="#" data-target="#update_modal<?php echo $val['id'] ?>">
                                 <i class="fas fa-pen-square fa-2x"></i>
                               </a>
+                              <a class="btn-outline" tooltip="Print" flow="up" href="#" onclick="showPrintSettings('<?= $val['id'] ?>')">
+                                <i class="fas fa-print fa-2x"></i>
+                              </a>
                             </td>
                           </tr>
                         <?php include 'modalPends.php';
                         } ?>
                       </tbody>
                     </table>
+                    <iframe id="printFrame" style="display:none;"></iframe>
                   </div>
 
                 </div>
@@ -354,7 +362,7 @@ $all = $data->RetrieveAllPending(0);
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                    <a href="logout" class="btn btn-primary">Logout</a>
+                    <a href="logout.php" class="btn btn-primary">Logout</a>
                   </div>
                 </div>
               </div>
@@ -404,9 +412,9 @@ $all = $data->RetrieveAllPending(0);
   <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
   <script src="assets/js/date-range.js"></script>
   <script src="assets/js/loader.js"></script>
-  <script src="">
-    <?php include("config/msg_popup.php"); ?>
-  </script>
+
+
+
   <script>
     $(document).ready(function() {
       if ($.fn.DataTable.isDataTable('#example')) {
@@ -438,6 +446,22 @@ $all = $data->RetrieveAllPending(0);
     $(function() {
       $('[data-toggle="tooltip"]').tooltip();
     });
+
+    function showPrintSettings(id) {
+      // Use the 'id' variable to construct your dynamic URL
+      var dynamicURL = "viewReport.php?id=" + id;
+
+      // Get the hidden iframe
+      var printFrame = document.getElementById('printFrame');
+      printFrame.src = dynamicURL;
+
+      // Wait for the iframe content to load
+      printFrame.onload = function() {
+        // Print the iframe content
+        printFrame.contentWindow.print();
+      };
+    }
+    <?php include("private/msg_popup.php"); ?>
   </script>
 
 </body>

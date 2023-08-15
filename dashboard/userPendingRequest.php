@@ -262,6 +262,7 @@ $all = $data->RetrieveAllUserPendingOrDone($status = 0, $username = $_SESSION['u
                       <thead class="thead-light">
                         <tr>
                           <th>MWO#</th>
+                          <th>Request&nbsp;for</th>
                           <th>Request&nbsp;Description</th>
                           <th>Date&nbsp;Request</th>
                           <th>Attached</th>
@@ -273,6 +274,7 @@ $all = $data->RetrieveAllUserPendingOrDone($status = 0, $username = $_SESSION['u
                         <?php foreach ($all as $key => $val) { ?>
                           <tr>
                             <td><?php echo 'MWO' . $val['id'] ?></td>
+                            <td style="white-space: normal !important;"><?php echo $val['requestfor']; ?></td>
                             <td style="white-space: normal !important;"><?php echo $val['remarks']; ?></td>
                             <td><?php echo date('m-d-Y', strtotime($val['date_request'])); ?></td>
                             <td class="image">

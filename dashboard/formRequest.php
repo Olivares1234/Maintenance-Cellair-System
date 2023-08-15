@@ -38,6 +38,7 @@ if (isset($_SESSION["username"])) {
   <link rel="stylesheet" type="text/css" href="assets/css/toastr.min.css">
   <link rel="stylesheet" href="assets/css/loader-animate.css">
 
+
   <style>
     .lblname {
       font-weight: 600;
@@ -83,7 +84,7 @@ if (isset($_SESSION["username"])) {
         <!-- <div class="mb-2"></div> -->
         <hr class="sidebar-divider my-0">
         <li class="nav-item active">
-          <a class="nav-link" href="formRequest">
+          <a class="nav-link" href="formRequest.php">
             <i class="fas fa-file-invoice"></i>
             <span>Form Request</span></a>
         </li>
@@ -115,7 +116,7 @@ if (isset($_SESSION["username"])) {
       <div class="mb-2"></div>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
-        <a class="nav-link" href="logs">
+        <a class="nav-link" href="logs.php">
           <i class="fa-solid fa-clipboard-user"></i>
           <span>Logs</span></a>
       </li>
@@ -216,35 +217,39 @@ if (isset($_SESSION["username"])) {
                           <span aria-hidden="true" style="color: red;">&times;</span>
                         </button>
                     </div>
-                    <form action="private/requestProcess.php" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <form action="private/requestProcess.php" method="POST" autocomplete="off" enctype="multipart/form-data" id="myForm">
                       <div class="form-group">
                         <label for="exampleFormControlInput1" class="lblname">REQUESTED BY:</label>
                         <span style="color: red; font-size:larger;">*</span>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="NAME...." required onkeydown="disableEnter(event)">
+                        <input type="text" class="form-control" name="name" id="exampleFormControlInput1" placeholder="NAME...." required onkeydown="disableEnter(event)">
                         <input type="text" class="form-control" name="username" value="<?php echo $_SESSION['username'] ?>" readonly hidden>
                       </div>
 
                       <div class="form-group" hidden>
                         <label for="exampleFormControlInput1" class="lblname">EMAIL:</label>
                         <span style="color: red; font-size:larger;">*</span>
-                        <input type="email" class="form-control" name="email" value="<?php echo $_SESSION['email']; ?>" id="email" placeholder="EMAIL...." required hidden>
+                        <input type="email" class="form-control" name="email" value="<?php echo $_SESSION['email']; ?>" id="exampleFormControlInput1" placeholder="EMAIL...." required>
                         <!--value = <php echo $_SESSION['email']; ?>-->
                       </div>
 
                       <div class="form-group">
                         <label for="exampleFormControlSelect1" class="lblname">COMPANY:</label>
                         <span style="color: red; font-size:larger;">*</span>
-                        <select class="form-control" name="company" id="company">
+                        <select class="form-control" name="company" id="exampleFormControlSelect1">
                           <option value="exelpack">EXELPACK</option>
-                          <option value="minamoto">MINAMOTO</option>
                           <option value="cellair">CELLAIR</option>
+                          <option value="minamoto">MINAMOTO</option>
+                          <option value="minamoto enterprises">MINAMOTO ENTERPRISES</option>
                         </select>
                       </div>
-
+                      <!-- <div class="form-group">
+                      <label for="exampleInputPassword1">Department:</label>
+                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div> -->
                       <div class="form-group">
                         <label for="exampleFormControlSelect1" class="lblname">DEPARTMENT:</label>
                         <span style="color: red; font-size:larger;">*</span>
-                        <select class="form-control" name="department" id="department">
+                        <select class="form-control" name="department" id="exampleFormControlSelect1">
                           <option value="admin">ADMIN</option>
                           <option value="acctg">ACCTG</option>
                           <option value="cs">CS</option>
@@ -258,16 +263,18 @@ if (isset($_SESSION["username"])) {
                         </select>
                       </div>
 
-                      <div class="form-group lblname">
-                        <label for="dropdown">REQUEST FOR:</label>
+                      <div class="form-group">
+                        <label for="exampleFormControlSelect1" class="lblname">REQUEST FOR:</label>
                         <span style="color: red; font-size:larger;">*</span>
-                        <select class="form-control" name="requestfor" id="dropdown" onchange="toggleInputField()">
-                          <option value="option1">MACHINE / EQUIPMENT</option>
-                          <option value="option2">VEHICLE</option>
-                          <option value="option3">FACILITY</option>
+                        <select class="form-control" name="requestfor" id="dropdown" onchange="toggleInputField()" required>
+                          <option value="">SELECT REQUEST...</option>
+                          <option value="machine / equipment">MACHINE / EQUIPMENT</option>
+                          <option value="vehicle">VEHICLE</option>
+                          <option value="facility">FACILITY</option>
                           <option value="others">OTHERS</option>
                         </select>
                       </div>
+
 
                       <div class="form-group">
                         <div id="othersInput" style="display: none;">
@@ -288,10 +295,19 @@ if (isset($_SESSION["username"])) {
                         </div>
                       </div>
 
+                      <!-- <div class="form-group" id="simple-date1">
+                     <label for="simpleDataInput" class="lblname">DATE REQUESTED:</label>
+                      <div class="input-group date">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        </div>
+                        <input type="date" class="form-control" value="MM/DD/YYYY" name="daterequested" id="simpleDataInput">
+                      </div>
+                  </div> -->
                       <div class="form-group">
                         <label for="exampleFormControlTextarea1" class="lblname">UPLOAD IMAGE/FILE:</label>
                         <input type="file" name="file" class="form-control" onChange="img_pathUrl(this);">
-                        <p class="text" style="color:red;">Optional Image/file Upload.</p>
+                        <p class="text" style="color:red;">Optional Image Upload.</p>
                       </div>
 
                       <div class="form-group">
@@ -325,7 +341,7 @@ if (isset($_SESSION["username"])) {
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                        <a href="logout" class="btn btn-primary">Logout</a>
+                        <a href="logout.php" class="btn btn-primary">Logout</a>
                       </div>
                     </div>
                   </div>
@@ -355,15 +371,27 @@ if (isset($_SESSION["username"])) {
         <i class="fas fa-angle-up"></i>
       </a>
 
-      <script src="assets/js/jquery-3.6.0.js"></script>
-      <script src="assets/js/toastr.min.js"></script>
-      <script src="assets/js/toastr-options.js"></script>
-
-      <script src="assets/vendor/jquery/jquery.min.js"></script>
-      <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
+        // $('#myForm').submit(function(event) {
+        //   event.preventDefault();
+
+        //   var submitBtn = $('#submitBtn');
+
+        //   var isValid = true;
+
+
+
+        //   if (isValid) {
+        //     submitBtn.attr('disabled', 'disabled');
+        //     submitBtn.html('<i class="fa fa-spinner fa-spin gap-right"></i> Sending ...');
+
+        //     setTimeout(function() {
+        //       $('#myForm').unbind('submit').submit();
+        //     }, 2000); // Simulate a 2-second delay before submitting
+        //   }
+        // });
+
         $('#submitBtn').click(function() {
           // $(this).attr('disabled','disabled');
           $(this).html('<i class="fa fa-spinner fa-spin gap-right"></i> Sending ...'); // change text
@@ -372,6 +400,17 @@ if (isset($_SESSION["username"])) {
           }, 10); // enable after 2 seconds
         });
       </script>
+      </script>
+
+      <script src="assets/js/jquery-3.6.0.js"></script>
+      <script src="assets/js/toastr.min.js"></script>
+      <script src="assets/js/toastr-options.js"></script>
+
+      <script src="assets/vendor/jquery/jquery.min.js"></script>
+      <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+
 
       <!-- Select2 -->
       <script src="assets/vendor/select2/dist/js/select2.min.js"></script>

@@ -24,6 +24,7 @@
             <div class="col-6">
               <label><b>Name:</b></label>
               <input type="text" name="name" value="<?php echo $val['name'] ?>" class="form-control" readonly />
+              <input type="text" name="requestfor" value="<?php echo $val['requestfor'] ?>" class="form-control" hidden readonly />
               <input type="text" name="email" value="<?php echo $val['email'] ?>" class="form-control" hidden readonly />
             </div>
             <div class="col-6">
@@ -36,8 +37,14 @@
             </div>
             <div class="col-6">
               <label><b>Date Request:</b></label>
-              <input type="date" name="date_request" value="<?php echo $val['date_request'] ?>" class="form-control" readonly />
+              <input type="text" name="date_requests" value="<?php echo date('m-d-Y', strtotime($val['date_request'])); ?>" class="form-control" readonly />
             </div>
+
+            <div class="col-6" hidden>
+              <label><b>Date Request:</b></label>
+              <input type="text" name="date_request" value="<?php echo $val['date_request']; ?>" class="form-control" readonly />
+            </div>
+
 
             <div class="col-6">
               <label><b>Status:</b></label>

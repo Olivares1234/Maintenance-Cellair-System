@@ -49,7 +49,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
       <hr class="sidebar-divider my-0">
       <?php if ($_SESSION['role'] === 'admin') { ?>
         <li class="nav-item">
-          <a class="nav-link" href="home">
+          <a class="nav-link" href="home.php">
             <i class="fa fa-home" aria-hidden="true"></i>
             <span>Dashboard</span></a>
         </li>
@@ -59,7 +59,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
         <div class="mb-2"></div>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="formRequest">
+          <a class="nav-link" href="formRequest.php">
             <i class="fas fa-file-invoice"></i>
             <span>Form Request</span></a>
         </li>
@@ -69,7 +69,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
       <?php if ($_SESSION['role'] === 'admin') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="doneRequest">
+          <a class="nav-link" href="doneRequest.php">
             <i class="fas fa-clipboard-check"></i>
             <span>Done Request</span></a>
         </li>
@@ -79,7 +79,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
       <?php if ($_SESSION['role'] === 'admin') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="pendingRequest">
+          <a class="nav-link" href="pendingRequest.php">
             <i class="fas fa-comments"></i>
             <span>Pending Request</span></a>
         </li>
@@ -89,7 +89,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="newRequest">
+          <a class="nav-link" href="newRequest.php">
             <i class="fas fa-users"></i>
             <span>New Request Today</span></a>
         </li>
@@ -100,7 +100,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
           <a class="nav-link" href="userDoneRequest.php">
-            <i class="fas fa-comments"></i>
+            <i class="fa-solid fa-clipboard-check"></i>
             <span>Done Request</span></a>
         </li>
       <?php } ?>
@@ -118,7 +118,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
       <div class="mb-2"></div>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
-        <a class="nav-link" href="logs">
+        <a class="nav-link" href="logs.php">
           <i class="fa-solid fa-clipboard-user"></i>
           <span>Logs</span></a>
       </li>
@@ -200,7 +200,7 @@ $all = $data->RetrieveAllLogs($_SESSION['username']); // Pass the session userna
                   <div class="loader">
                     <div><img src="assets/img/loader/box-unscreen.gif" alt=""></div>
                   </div>
-                  <div class="dt-responsive p-12" style="width: 100%; overflow-x: auto;">
+                  <div class="dt-responsive p-3" style="width: 100%; overflow-x: auto;">
                     <table style="cellspacing:0; width:100%; white-space: normal !important;" class="table align-items-center table-flush table-hover dt-responsive nowrap" id="example">
                       <thead class="thead-light">
                         <tr>

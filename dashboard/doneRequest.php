@@ -110,7 +110,7 @@ $all = $data->RetrieveAllDone(1);
       <?php if ($_SESSION['role'] != 'admin') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="formRequest">
+          <a class="nav-link" href="formRequestphp">
             <i class="fas fa-file-invoice"></i>
             <span>Form Request</span></a>
         </li>
@@ -120,7 +120,7 @@ $all = $data->RetrieveAllDone(1);
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item active">
-          <a class="nav-link" href="doneRequest">
+          <a class="nav-link" href="doneRequestphp">
             <i class="fa-solid fa-clipboard-check"></i>
             <span>Done Request</span></a>
         </li>
@@ -130,7 +130,7 @@ $all = $data->RetrieveAllDone(1);
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="pendingRequest">
+          <a class="nav-link" href="pendingRequestphp">
             <i class="fas fa-comments"></i>
             <span>Pending Request</span></a>
         </li>
@@ -140,7 +140,7 @@ $all = $data->RetrieveAllDone(1);
       <?php if ($_SESSION['role'] != 'user') { ?>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-          <a class="nav-link" href="newRequest">
+          <a class="nav-link" href="newRequestphp">
             <i class="fas fa-users"></i>
             <span>New Request Today</span></a>
         </li>
@@ -149,7 +149,7 @@ $all = $data->RetrieveAllDone(1);
       <div class="mb-2"></div>
       <hr class="sidebar-divider my-0">
       <li class="nav-item">
-        <a class="nav-link" href="logs">
+        <a class="nav-link" href="logs.php">
           <i class="fa-solid fa-clipboard-user"></i>
           <span>Logs</span></a>
       </li>
@@ -277,6 +277,7 @@ $all = $data->RetrieveAllDone(1);
                           <th>Department</th>
                           <th>Date&nbsp;Request</th>
                           <th>Date&nbsp;Completed</th>
+                          <th>Request&nbsp;Description</th>
                           <th>Remarks</th>
                           <th>Status</th>
                           <th>Action</th>
@@ -295,18 +296,24 @@ $all = $data->RetrieveAllDone(1);
                             <td><?php echo $val['name']; ?></td>
                             <td><?php echo $val['company']; ?></td>
                             <td><?php echo $val['department']; ?></td>
-                            <td><?php echo date('m-d-Y', strtotime($val['date_request'])); ?></td>
-                            <td><?php echo date('m-d-Y', strtotime($val['date_finish'])); ?></td>
+                            <td><?php echo $val['date_request']; ?></td>
+                            <td><?php echo $val['date_finish']; ?></td>
                             <td style="white-space: normal !important;"><?php echo $val['remarks']; ?></td>
+                            <td style="white-space: normal !important;"><?php echo $val['feedback']; ?></td>
                             <td>
                               <?php echo ($val['status'] == 0) ? '<span class="badge badge-danger">Pending</span>' : '<span class="badge badge-success">Done</span>'; ?>
                             </td>
-                            <td><a class="btn-outline" tooltip="Print" flow="up" href="viewReport?id=<?= $val['id'] ?>" target="_blank"><i class="fas fa-print fa-2x"></i></a></td>
+                            <td>
+                              <a class="btn-outline" tooltip="Print" flow="up" href="#" onclick="showPrintSettings('<?= $val['id'] ?>')">
+                                <i class="fas fa-print fa-2x"></i>
+                              </a>
+                            </td>
 
                           </tr>
                         <?php } ?>
                       </tbody>
                     </table>
+                    <iframe id="printFrame" style="display:none;"></iframe>
                   </div>
 
                 </div>
@@ -333,7 +340,7 @@ $all = $data->RetrieveAllDone(1);
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                    <a href="logout" class="btn btn-primary">Logout</a>
+                    <a href="logout.php" class="btn btn-primary">Logout</a>
                   </div>
                 </div>
               </div>
@@ -420,9 +427,20 @@ $all = $data->RetrieveAllDone(1);
 
 
   <script>
-    $(function() {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
+    function showPrintSettings(id) {
+      // Use the 'id' variable to construct your dynamic URL
+      var dynamicURL = "viewReport.php?id=" + id;
+
+      // Get the hidden iframe
+      var printFrame = document.getElementById('printFrame');
+      printFrame.src = dynamicURL;
+
+      // Wait for the iframe content to load
+      printFrame.onload = function() {
+        // Print the iframe content
+        printFrame.contentWindow.print();
+      };
+    }
   </script>
 
 </body>

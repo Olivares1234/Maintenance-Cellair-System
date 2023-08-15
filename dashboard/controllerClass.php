@@ -7,15 +7,16 @@ class controllerClass
   private $id;
   private $username;
   private $name;
-  private $company;
   private $email;
+  private $company;
+  private $requestfor;
   private $department;
   private $date_request;
-  private $date_finish;
   private $remarks;
+  private $image;
   private $status;
   private $feedback;
-  protected $con_Db;
+  private $date_finish;
 
   public function __construct(
     $id = 0,
@@ -23,6 +24,7 @@ class controllerClass
     $name = "",
     $email = "",
     $company = "",
+    $requestfor = "",
     $department = "",
     $date_request = "",
     $date_finish = "",
@@ -35,6 +37,7 @@ class controllerClass
     $this->name = $name;
     $this->email = $email;
     $this->company = $company;
+    $this->requestfor = $requestfor;
     $this->department = $department;
     $this->date_request = $date_request;
     $this->date_finish = $date_finish;
@@ -87,6 +90,14 @@ class controllerClass
   public function getcompany()
   {
     return $this->company;
+  }
+  public function setrequestfor($requestfor)
+  {
+    $this->requestfor = $requestfor;
+  }
+  public function getrequestfor()
+  {
+    return $this->requestfor;
   }
   public function setdepartment($department)
   {
