@@ -8,6 +8,8 @@
             width="150">
     </a>
         <br>
+
+The Maintenance Request System is a dynamic and user-friendly web application designed to streamline the process of submitting, monitoring, and managing maintenance requests within an organization. Built using PHP and jQuery, this system provides a seamless experience for employees to report concerns, while also offering a comprehensive interface for administrators to monitor ongoing, pending, and completed requests.
     <br>
     
    <img src="https://user-images.githubusercontent.com/83743108/192310711-6e2a40a5-b8fd-4855-9b7f-988ff0864569.png" width="900" height="400">
